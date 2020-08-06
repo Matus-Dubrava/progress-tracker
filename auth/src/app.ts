@@ -10,10 +10,6 @@ import { handleError } from './middleware/handle-error';
 const app = express();
 const API_VERSION = process.env.API_VERSION;
 
-if (!API_VERSION) {
-	throw new Error('API_VERSION is not set');
-}
-
 app.use(json());
 app.use(cors());
 
