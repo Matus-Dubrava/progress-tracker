@@ -1,0 +1,12 @@
+FROM node:14-stretch-slim
+
+ENV PORT 5000
+ENV API_VERSION v1
+EXPOSE $PORT
+
+WORKDIR /node/app
+COPY ./package*.json ./
+RUN npm install 
+COPY . . 
+
+CMD ["npm", "run", "dev"]
