@@ -5,6 +5,7 @@ import { PasswordManager } from '../services/password-manager';
 interface UserAttrs {
 	email: string;
 	password: string;
+	name: string;
 }
 
 interface UserModel extends mongoose.Model<UserDocument> {
@@ -13,6 +14,7 @@ interface UserModel extends mongoose.Model<UserDocument> {
 
 interface UserDocument extends mongoose.Document {
 	email: string;
+	name: string;
 	password: string;
 }
 
