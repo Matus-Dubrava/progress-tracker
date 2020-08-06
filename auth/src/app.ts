@@ -1,12 +1,11 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import { json } from 'body-parser';
 import cors from 'cors';
 import 'express-async-errors';
 
 import { signupRouter } from './routes/signup';
 import { NotFoundError } from './errors/not-found-error';
-import { InternalServerError } from './errors/internal-server-error';
-import { CustomError } from './errors/custom-error';
+import { handleError } from './middleware/handle-error';
 
 const app = express();
 const API_VERSION = process.env.API_VERSION;
@@ -31,17 +30,6 @@ app.use('*', (req, res) => {
 	throw new NotFoundError(`Resource: ${method} ${url} not found`);
 });
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-	// check whether the error was thrown intentionally
-	if (err instanceof CustomError) {
-		return res.status(err.statusCode).send(err.serializeError());
-	}
-
-	// This was unexpected error, not thrown by us
-	const internalError = new InternalServerError();
-	return res
-		.status(internalError.statusCode)
-		.send(internalError.serializeError());
-});
+app.use(handleError);
 
 export { app };
