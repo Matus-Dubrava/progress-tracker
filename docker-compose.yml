@@ -10,5 +10,15 @@ services:
     environment:
       - PORT=5000
       - API_VERSION=v1
+      - MONGO_URI=mongodb://db:27017
     volumes:
       - "./auth/:/node/app"
+    depends_on:
+      - db
+  db:
+    image: mongo
+    volumes:
+      - "progress_tracker_mongo_auth_service:/data/db"
+
+volumes:
+  progress_tracker_mongo_auth_service:
