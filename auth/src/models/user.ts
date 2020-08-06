@@ -12,7 +12,7 @@ interface UserModel extends mongoose.Model<UserDocument> {
 	build(attrs: UserAttrs): UserDocument;
 }
 
-interface UserDocument extends mongoose.Document {
+export interface UserDocument extends mongoose.Document {
 	email: string;
 	name: string;
 	password: string;
@@ -21,6 +21,7 @@ interface UserDocument extends mongoose.Document {
 const userSchema = new mongoose.Schema({
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
+	name: { type: String, required: true },
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
