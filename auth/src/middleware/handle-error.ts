@@ -9,6 +9,8 @@ export const handleError = (
 	res: Response,
 	next: NextFunction
 ) => {
+	console.log(err.message);
+
 	// check whether the error was thrown intentionally
 	if (err instanceof CustomError) {
 		return res.status(err.statusCode).send(err.serializeError());
