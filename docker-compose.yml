@@ -19,6 +19,8 @@ services:
             - db
     db:
         image: mongo
+        logging:
+            driver: none
         volumes:
             - 'progress_tracker_mongo_auth_service:/data/db'
     client:
