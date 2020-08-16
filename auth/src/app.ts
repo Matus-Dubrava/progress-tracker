@@ -6,6 +6,7 @@ import 'express-async-errors';
 
 import { signupRouter } from './routes/signup';
 import { signinRouter } from './routes/signin';
+import { currentUserRouter } from './routes/current-user';
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
 
@@ -23,6 +24,7 @@ app.use(
 
 app.use(signupRouter);
 app.use(signinRouter);
+app.use(currentUserRouter);
 
 // health check route
 app.get(`/api/${API_VERSION}/auth/health`, (req, res) => {
