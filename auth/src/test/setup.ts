@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 let mongo: any;
 
 beforeAll(async () => {
-	process.env.JWT_KEY = 'testkey12345';
+	process.env.JWT_KEY = 'jwttestkey12345';
+	process.env.COOKIE_KEY = 'cookietestkey12345';
 
 	mongo = new MongoMemoryServer();
 	const mongoURI = await mongo.getUri();

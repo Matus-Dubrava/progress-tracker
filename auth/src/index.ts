@@ -22,6 +22,10 @@ if (!process.env.JWT_KEY) {
 	throw new Error('JWT_KEY is not set');
 }
 
+if (!process.env.COOKIE_KEY) {
+	throw new Error('COOKIE_KEY is not set');
+}
+
 app.listen(PORT, async () => {
 	try {
 		await mongoose.connect(`${MONGO_URI}/users`, {

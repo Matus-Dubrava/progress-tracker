@@ -20,7 +20,7 @@ app.use(cors());
 app.use(
 	cookieSession({
 		name: 'session',
-		keys: ['12345'],
+		keys: ['cookietestkey12345'],
 		httpOnly: true,
 	})
 );

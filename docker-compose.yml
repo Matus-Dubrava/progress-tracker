@@ -1,25 +1,26 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  auth:
-    build:
-      context: ./auth
-      dockerfile: Dockerfile.dev
-    ports:
-      - "5000:5000"
-    environment:
-      - PORT=5000
-      - API_VERSION=v1
-      - MONGO_URI=mongodb://db:27017
-      - JWT_KEY=testkey12345
-    volumes:
-      - "./auth/:/node/app"
-    depends_on:
-      - db
-  db:
-    image: mongo
-    volumes:
-      - "progress_tracker_mongo_auth_service:/data/db"
+    auth:
+        build:
+            context: ./auth
+            dockerfile: Dockerfile.dev
+        ports:
+            - '5000:5000'
+        environment:
+            - PORT=5000
+            - API_VERSION=v1
+            - MONGO_URI=mongodb://db:27017
+            - JWT_KEY=jwttestkey12345
+            - COOKIE_KEY=cookietestkey12345
+        volumes:
+            - './auth/:/node/app'
+        depends_on:
+            - db
+    db:
+        image: mongo
+        volumes:
+            - 'progress_tracker_mongo_auth_service:/data/db'
 
 volumes:
-  progress_tracker_mongo_auth_service:
+    progress_tracker_mongo_auth_service:
