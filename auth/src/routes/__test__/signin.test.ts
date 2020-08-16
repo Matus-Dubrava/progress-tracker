@@ -78,3 +78,21 @@ it('should return 422 when incorrect email, password or both are supplied', asyn
 		})
 		.expect(422);
 });
+
+it('should return 422 when email or password or both are missing', async () => {
+	await request(app)
+		.post(config.signinPostUrl)
+		.send({
+			email: config.testEmail,
+		})
+		.expect(422);
+
+	await request(app)
+		.post(config.signinPostUrl)
+		.send({
+			password: config.testPassword,
+		})
+		.expect(422);
+
+	await request(app).post(config.signinPostUrl).send({}).expect(422);
+});
