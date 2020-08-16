@@ -21,6 +21,6 @@ export class PasswordManager {
 			salt,
 			HASH_ROUNDS
 		)) as Buffer;
-		return buf.toString() === hashedPassword;
+		return buf.toString('hex') === hashedPassword;
 	}
 }

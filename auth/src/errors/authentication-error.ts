@@ -3,8 +3,8 @@ import { CustomError } from './custom-error';
 export class AuthenticationError extends CustomError {
 	statusCode = 422;
 
-	constructor(public message: string) {
-		super(message);
+	constructor() {
+		super('incorrect login credentials');
 		Object.setPrototypeOf(this, AuthenticationError.prototype);
 	}
 

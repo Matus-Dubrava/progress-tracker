@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
+import jwt from 'jsonwebtoken';
 
 import { validateRequest } from '../middleware/validate-request';
 import { serializeUser } from '../services/serialize-user';
 import { User } from '../models/user';
-import { AuthenticationError } from '../errors/authentication-error';
 import { EmailTakenSignupError } from '../errors/email-taken-signup-error';
 
 const router = Router();
@@ -36,6 +36,17 @@ router.post(
 		await user.save();
 
 		// create JWS and cookie and respond
+		const userJwt = jwt.sign(
+			{
+				id: user.id,
+				email: user.email,
+			},
+			process.env.JWT_KEY!
+		);
+
+		req.session = {
+			jwt: userJwt,
+		};
 		return res.status(201).send(serializeUser(user));
 	}
 );

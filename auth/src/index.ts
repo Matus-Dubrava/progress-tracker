@@ -18,6 +18,10 @@ if (!MONGO_URI) {
 	throw new Error('MONGO_URI is not set');
 }
 
+if (!process.env.JWT_KEY) {
+	throw new Error('JWT_KEY is not set');
+}
+
 app.listen(PORT, async () => {
 	try {
 		await mongoose.connect(`${MONGO_URI}/users`, {
