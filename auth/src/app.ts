@@ -3,6 +3,7 @@ import { json } from 'body-parser';
 import cors from 'cors';
 import cookieSession from 'cookie-session';
 import 'express-async-errors';
+import winston from 'winston';
 
 import { signupRouter } from './routes/signup';
 import { signinRouter } from './routes/signin';
@@ -11,19 +12,35 @@ import { signoutRouter } from './routes/signout';
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
 
+export const logger = winston.createLogger({
+	defaultMeta: {
+		service: 'auth-service',
+	},
+	transports: [
+		new winston.transports.Console({
+			format: winston.format.json(),
+		}),
+	],
+});
+
 const app = express();
-const API_VERSION = process.env.API_VERSION;
-const authBaseUrlPath = `/api/${API_VERSION}/auth`;
+const authBaseUrlPath = `/api/${process.env.API_VERSION}/auth`;
 
 app.use(json());
 app.use(cors());
 app.use(
 	cookieSession({
 		name: 'session',
-		keys: ['cookietestkey12345'],
+		keys: [process.env.COOKIE_KEY!],
 		httpOnly: true,
 	})
 );
+
+app.use((req, res, next) => {
+	const { method, url } = req;
+	logger.info(`REQUEST: ${method} ${url}`);
+	next();
+});
 
 app.use(authBaseUrlPath, signupRouter);
 app.use(authBaseUrlPath, signinRouter);
