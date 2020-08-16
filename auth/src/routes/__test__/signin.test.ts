@@ -1,8 +1,8 @@
 import request from 'supertest';
-import jwt from 'jsonwebtoken';
 
 import { app } from '../../app';
 import { config } from './config';
+import { parseJwtValueFromCookieSession } from './helpers';
 
 beforeEach(async () => {
 	await request(app)
@@ -39,18 +39,10 @@ it('should return cookie on successful signup with correct email stored in JWT',
 		.split(';')[0]
 		.split('session=')[1];
 
-	const buf = Buffer.from(session, 'base64');
-	const text = buf.toString('ascii');
+	const jwtValue = parseJwtValueFromCookieSession(session);
 
-	const jwtValue = JSON.parse(text).jwt;
-	const val = jwt.decode(jwtValue) as {
-		id: string;
-		email: string;
-		iat: number;
-	};
-
-	expect(val.email).toEqual(config.testEmail);
-	expect(val.id).not.toBeNull();
+	expect(jwtValue.email).toEqual(config.testEmail);
+	expect(jwtValue.id).not.toBeNull();
 });
 
 it('should return 422 when incorrect email, password or both are supplied', async () => {

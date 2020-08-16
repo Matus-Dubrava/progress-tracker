@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { app } from '../../app';
 import { config } from './config';
+import { parseJwtValueFromCookieSession } from './helpers';
 
 it('returns 201 on successful signup', async () => {
 	return request(app)
@@ -118,16 +119,18 @@ it('should return cookie on successful signup with correct email stored in JWT',
 		.split(';')[0]
 		.split('session=')[1];
 
-	const buf = Buffer.from(session, 'base64');
-	const text = buf.toString('ascii');
+	const jwtValue = parseJwtValueFromCookieSession(session);
 
-	const jwtValue = JSON.parse(text).jwt;
-	const val = jwt.decode(jwtValue) as {
-		id: string;
-		email: string;
-		iat: number;
-	};
+	// const buf = Buffer.from(session, 'base64');
+	// const text = buf.toString('ascii');
 
-	expect(val.email).toEqual(config.testEmail);
-	expect(val.id).not.toBeNull();
+	// const jwtValue = JSON.parse(text).jwt;
+	// const val = jwt.decode(jwtValue) as {
+	// 	id: string;
+	// 	email: string;
+	// 	iat: number;
+	// };
+
+	expect(jwtValue.email).toEqual(config.testEmail);
+	expect(jwtValue.id).not.toBeNull();
 });
