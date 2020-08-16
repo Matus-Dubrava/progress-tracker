@@ -121,16 +121,6 @@ it('should return cookie on successful signup with correct email stored in JWT',
 
 	const jwtValue = parseJwtValueFromCookieSession(session);
 
-	// const buf = Buffer.from(session, 'base64');
-	// const text = buf.toString('ascii');
-
-	// const jwtValue = JSON.parse(text).jwt;
-	// const val = jwt.decode(jwtValue) as {
-	// 	id: string;
-	// 	email: string;
-	// 	iat: number;
-	// };
-
 	expect(jwtValue.email).toEqual(config.testEmail);
 	expect(jwtValue.id).not.toBeNull();
 });
