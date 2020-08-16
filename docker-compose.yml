@@ -21,6 +21,18 @@ services:
         image: mongo
         volumes:
             - 'progress_tracker_mongo_auth_service:/data/db'
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile.dev
+        stdin_open: true
+        tty: true
+        ports:
+            - '3000:3000'
+        volumes:
+            - './client:/react/app'
+        depends_on:
+            - auth
 
 volumes:
     progress_tracker_mongo_auth_service:
