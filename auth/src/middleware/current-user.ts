@@ -6,7 +6,7 @@ interface UserPayload {
 	id: string;
 }
 
-// ensuret that Typescript knows about currentUser property on Request object
+// ensure that Typescript knows about currentUser property on Request object
 declare global {
 	namespace Express {
 		interface Request {
