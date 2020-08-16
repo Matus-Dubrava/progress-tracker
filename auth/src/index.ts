@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import { app } from './app';
+import { logger } from './app';
 
 const PORT = process.env.PORT;
 const API_VERSION = process.env.API_VERSION;
@@ -33,10 +34,11 @@ app.listen(PORT, async () => {
 			useCreateIndex: true,
 			useNewUrlParser: true,
 		});
-		console.log('successfully connected to database');
+		logger.info('successfully connected to database');
 	} catch (err) {
-		throw new Error('ERROR: failed to connect to database');
+		logger.error('failed to connect to database');
+		throw new Error('failed to connect to database');
 	}
 
-	console.log(`auth service listening on port ${PORT}`);
+	logger.info(`auth service listening on port ${PORT}`);
 });
