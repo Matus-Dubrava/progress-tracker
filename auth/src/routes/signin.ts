@@ -9,10 +9,9 @@ import { PasswordManager } from '../services/password-manager';
 import { serializeUser } from '../services/serialize-user';
 
 const router = Router();
-const API_VERSION = process.env.API_VERSION;
 
 router.post(
-	`/api/${API_VERSION}/auth/signin`,
+	`/signin`,
 	[
 		body('email').isEmail().withMessage('incorrect or missing email'),
 		body('password').notEmpty(),

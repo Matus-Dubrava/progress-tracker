@@ -8,10 +8,9 @@ import { User } from '../models/user';
 import { EmailTakenSignupError } from '../errors/email-taken-signup-error';
 
 const router = Router();
-const API_VERSION = process.env.API_VERSION;
 
 router.post(
-	`/api/${API_VERSION}/auth/signup`,
+	`/signup`,
 	[
 		body('email').isEmail().withMessage('incorrect or missing email'),
 		body('name').notEmpty().withMessage('missing name'),

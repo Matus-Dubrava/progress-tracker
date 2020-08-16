@@ -13,6 +13,7 @@ import { handleError } from './middleware/handle-error';
 
 const app = express();
 const API_VERSION = process.env.API_VERSION;
+const authBaseUrlPath = `/api/${API_VERSION}/auth`;
 
 app.use(json());
 app.use(cors());
@@ -24,13 +25,13 @@ app.use(
 	})
 );
 
-app.use(signupRouter);
-app.use(signinRouter);
-app.use(currentUserRouter);
-app.use(signoutRouter);
+app.use(authBaseUrlPath, signupRouter);
+app.use(authBaseUrlPath, signinRouter);
+app.use(authBaseUrlPath, currentUserRouter);
+app.use(authBaseUrlPath, signoutRouter);
 
 // health check route
-app.get(`/api/${API_VERSION}/auth/health`, (req, res) => {
+app.get(`${authBaseUrlPath}/health`, (req, res) => {
 	return res.sendStatus(200);
 });
 
