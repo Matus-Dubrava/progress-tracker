@@ -118,7 +118,7 @@ it('should return cookie on successful signup with correct email stored in JWT',
 		.split(';')[0]
 		.split('session=')[1];
 
-	const buf = new Buffer(session, 'base64');
+	const buf = Buffer.from(session, 'base64');
 	const text = buf.toString('ascii');
 
 	const jwtValue = JSON.parse(text).jwt;
