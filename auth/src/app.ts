@@ -3,7 +3,8 @@ import { json } from 'body-parser';
 import cors from 'cors';
 import cookieSession from 'cookie-session';
 import 'express-async-errors';
-import winston from 'winston';
+import { createLogger, format, transports } from 'winston';
+const { combine, timestamp, printf } = format;
 
 import { signupRouter } from './routes/signup';
 import { signinRouter } from './routes/signin';
@@ -12,15 +13,16 @@ import { signoutRouter } from './routes/signout';
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
 
-export const logger = winston.createLogger({
+const loggingFormat = printf(({ level, message, timestamp }) => {
+	return `${timestamp} ${level} ${message}`;
+});
+
+export const logger = createLogger({
 	defaultMeta: {
 		service: 'auth-service',
 	},
-	transports: [
-		new winston.transports.Console({
-			format: winston.format.json(),
-		}),
-	],
+	format: combine(timestamp(), loggingFormat),
+	transports: [new transports.Console()],
 });
 
 const app = express();
