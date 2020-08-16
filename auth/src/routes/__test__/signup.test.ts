@@ -1,4 +1,6 @@
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
+
 import { app } from '../../app';
 
 const API_VERSION = process.env.API_VERSION;
@@ -107,4 +109,33 @@ it('should fail with 422 if email address is already in use', async () => {
 			email: testEmail,
 		})
 		.expect(422);
+});
+
+it('should return cookie on successful signup with correct email stored in JWT', async () => {
+	const response = await request(app)
+		.post(signupPostUrl)
+		.send({
+			password: testPassword,
+			name: testName,
+			email: testEmail,
+		})
+		.expect(201);
+
+	const session = response
+		.get('Set-Cookie')[0]
+		.split(';')[0]
+		.split('session=')[1];
+
+	const buf = new Buffer(session, 'base64');
+	const text = buf.toString('ascii');
+
+	const jwtValue = JSON.parse(text).jwt;
+	const val = jwt.decode(jwtValue) as {
+		id: string;
+		email: string;
+		iat: number;
+	};
+
+	expect(val.email).toEqual(testEmail);
+	expect(val.id).not.toBeNull();
 });

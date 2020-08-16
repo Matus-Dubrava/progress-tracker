@@ -20,6 +20,7 @@ app.use(
 	cookieSession({
 		name: 'session',
 		keys: ['12345'],
+		httpOnly: true,
 	})
 );
 
