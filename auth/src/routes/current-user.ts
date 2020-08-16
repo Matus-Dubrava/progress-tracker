@@ -9,7 +9,6 @@ router.get(
 	`/api/${API_VERSION}/auth/current-user`,
 	currentUser,
 	(req: Request, res: Response, next: NextFunction) => {
-		console.log('current user route');
 		return res.send({ currentUser: req.currentUser || null });
 	}
 );
