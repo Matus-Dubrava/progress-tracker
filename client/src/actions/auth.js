@@ -1,6 +1,7 @@
 import authServer from '../apis/authServer';
 
 import { SIGN_IN, SIGN_OUT } from './types';
+import history from '../history';
 
 export const signIn = (email, password) => async (dispatch) => {
 	try {
@@ -21,6 +22,7 @@ export const signIn = (email, password) => async (dispatch) => {
 export const signOut = () => async (dispath) => {
 	try {
 		await authServer.get('/signout');
+		history.push('/');
 		dispath({
 			type: SIGN_OUT,
 		});
@@ -36,7 +38,7 @@ export const signUp = (name, email, password) => async (dispatch) => {
 			name,
 			password,
 		});
-		console.log(response.data);
+		history.push('/');
 		dispatch({
 			type: SIGN_IN,
 			payload: {

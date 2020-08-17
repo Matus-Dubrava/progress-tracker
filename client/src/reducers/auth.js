@@ -14,6 +14,7 @@ export default (state = INITIAL_STATE, action) => {
 				...state,
 				email: action.payload.email,
 				id: action.payload.id,
+				name: action.payload.name,
 				isSignedIn: true,
 			};
 		case SIGN_OUT:

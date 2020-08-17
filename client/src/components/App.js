@@ -11,14 +11,18 @@ import Signup from './auth/Signup';
 function App() {
 	return (
 		<Router history={history}>
-			<Navigation />
+			<div className="row no-gutters">
+				<div className="col-sm-2">
+					<Navigation />
+				</div>
 
-			<div className="app-container">
-				<div className="container">
-					<Switch>
-						<Route path="/" exact component={Landing} />
-						<Route path="/signup" component={Signup} />
-					</Switch>
+				<div className="col-sm-10">
+					<div className="container">
+						<Switch>
+							<Route path="/" exact component={Landing} />
+							<Route path="/signup" component={Signup} />
+						</Switch>
+					</div>
 				</div>
 			</div>
 		</Router>

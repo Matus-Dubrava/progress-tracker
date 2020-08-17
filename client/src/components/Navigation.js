@@ -3,14 +3,19 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './Navigation.css';
+import { signOut } from '../actions';
 
-const Navigation = ({ isSignedIn, name, email }) => {
+const Navigation = ({ isSignedIn, name, email, signOut }) => {
 	return (
 		<nav className="navigation">
 			<ul className="navigation-list">
 				{isSignedIn ? (
 					<>
 						<li className="navigation-item">{name}</li>
+						<li className="navigation-item">{email}</li>
+						<li>
+							<button onClick={signOut}>Sign Out</button>
+						</li>
 						<li className="navigation-item">
 							<Link className="navigation-link" to="/">
 								Home
@@ -44,4 +49,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(Navigation);
+export default connect(mapStateToProps, { signOut })(Navigation);

@@ -1,22 +1,11 @@
 .navigation {
-	width: 15rem;
 	height: 100vh;
 	color: white;
 	background-color: rgb(41, 11, 83);
-	position: absolute;
-	top: 0;
-	left: 0;
 }
 
 .navigation-list {
 	list-style-type: none;
-	display: flex;
-	flex-direction: column;
-	height: 20rem;
-}
-
-.navigation-item {
-	display: block;
 }
 
 .navigation-link {
