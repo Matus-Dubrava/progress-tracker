@@ -25,7 +25,7 @@ function App({ getLoginStatus }) {
 
 				<div className="col-sm-10">
 					<TopNavigation />
-					<div className="container">
+					<div className="container app-container">
 						<Switch>
 							<Route path="/" exact component={Landing} />
 							<Route path="/signup" component={Signup} />

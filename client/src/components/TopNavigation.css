@@ -8,6 +8,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	font-size: 15px;
 }
 
 .top-navigation-list {
@@ -27,4 +28,14 @@
 
 .top-navigation-link {
 	color: rgb(148, 148, 148);
+	border: none;
+	cursor: pointer;
+	outline: none;
+	background-color: transparent;
+	font-size: inherit;
+}
+
+.top-navigation-link:hover {
+	color: rgb(177, 45, 119);
+	text-decoration: none;
 }
