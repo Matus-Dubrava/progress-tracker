@@ -1,0 +1,30 @@
+.top-navigation {
+	background-color: #f3f3f4;
+	height: 3.5rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.top-navigation-list {
+	list-style-type: none;
+	margin: 0;
+	color: rgb(148, 148, 148);
+}
+
+.top-navigation-list__right {
+	margin-right: 5rem;
+	display: flex;
+}
+
+.top-navigation-item {
+	margin-right: 1rem;
+}
+
+.top-navigation-link {
+	color: rgb(148, 148, 148);
+}
