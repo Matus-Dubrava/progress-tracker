@@ -28,14 +28,15 @@ export const logger = createLogger({
 const app = express();
 const authBaseUrlPath = `/api/${process.env.API_VERSION}/auth`;
 
+app.set('trust proxy', true);
+
 app.use(json());
-app.use(cors());
 app.use(
 	cookieSession({
-		name: 'session',
 		// keys: [process.env.COOKIE_KEY!],
 		keys: ['12345'],
 		httpOnly: true,
+		secure: true,
 	})
 );
 
