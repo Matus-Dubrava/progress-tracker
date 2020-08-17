@@ -2,20 +2,34 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import './Navigation.css';
+
 const Navigation = ({ isSignedIn, name, email }) => {
 	return (
-		<nav>
-			<ul>
+		<nav className="navigation">
+			<ul className="navigation-list">
 				{isSignedIn ? (
-					<li>
-						<Link to="/">Home</Link>
-						<Link to="/test">Test Link</Link>
-					</li>
+					<>
+						<li className="navigation-item">{name}</li>
+						<li className="navigation-item">
+							<Link className="navigation-link" to="/">
+								Home
+							</Link>
+						</li>
+					</>
 				) : (
-					<li>
-						<Link to="/signup">Sign Up</Link>
-						<Link to="/signin">Sign In</Link>
-					</li>
+					<>
+						<li className="navigation-item">
+							<Link className="navigation-link" to="/signup">
+								Sign Up
+							</Link>
+						</li>
+						<li>
+							<Link className="navigation-link" to="/signin">
+								Sign In
+							</Link>
+						</li>
+					</>
 				)}
 			</ul>
 		</nav>
