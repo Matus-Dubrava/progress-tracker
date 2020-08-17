@@ -6,6 +6,7 @@ let mongo: any;
 beforeAll(async () => {
 	process.env.JWT_KEY = 'jwttestkey12345';
 	process.env.COOKIE_KEY = 'cookietestkey12345';
+	process.env.API_VERSION = 'v1';
 
 	mongo = new MongoMemoryServer();
 	const mongoURI = await mongo.getUri();

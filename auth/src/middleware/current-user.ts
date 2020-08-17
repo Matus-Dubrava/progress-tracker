@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+import { User } from '../models/user';
+
 interface UserPayload {
 	email: string;
 	id: string;
+	name: string;
 }
 
 // ensure that Typescript knows about currentUser property on Request object
@@ -15,7 +18,7 @@ declare global {
 	}
 }
 
-const currentUser = (req: Request, res: Response, next: NextFunction) => {
+const currentUser = async (req: Request, res: Response, next: NextFunction) => {
 	// if there is no JWT, continue without setting currentUser
 	if (!req.session?.jwt) {
 		return next();
@@ -31,6 +34,7 @@ const currentUser = (req: Request, res: Response, next: NextFunction) => {
 		req.currentUser = {
 			email: payload.email,
 			id: payload.id,
+			name: payload.name,
 		};
 	} catch (err) {
 		throw err;

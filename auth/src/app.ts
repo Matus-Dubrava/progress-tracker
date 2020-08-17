@@ -33,7 +33,8 @@ app.use(cors());
 app.use(
 	cookieSession({
 		name: 'session',
-		keys: [process.env.COOKIE_KEY!],
+		// keys: [process.env.COOKIE_KEY!],
+		keys: ['12345'],
 		httpOnly: true,
 	})
 );
