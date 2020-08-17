@@ -54,15 +54,17 @@ export const signUp = (name, email, password) => async (dispatch) => {
 
 export const getLoginStatus = () => async (dispatch) => {
 	try {
+		console.log('getting login status');
 		const response = await authServer.get('/current-user');
 
 		if (response.data.currentUser) {
+			const { currentUser } = response.data;
 			dispatch({
 				type: SIGN_IN,
 				payload: {
-					name: response.data.name,
-					email: response.data.email,
-					id: response.data.id,
+					name: currentUser.name,
+					email: currentUser.email,
+					id: currentUser.id,
 				},
 			});
 		} else {
