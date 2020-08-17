@@ -7,9 +7,11 @@ export const signIn = (email, password) => async (dispatch) => {
 		const response = await authServer.post('/signin', { email, password });
 		dispatch({
 			type: SIGN_IN,
-			name: response.data.name,
-			email: response.data.email,
-			id: response.data.id,
+			payload: {
+				name: response.data.name,
+				email: response.data.email,
+				id: response.data.id,
+			},
 		});
 	} catch (err) {
 		console.log(err);
@@ -34,11 +36,14 @@ export const signUp = (name, email, password) => async (dispatch) => {
 			name,
 			password,
 		});
+		console.log(response.data);
 		dispatch({
 			type: SIGN_IN,
-			name: response.data.name,
-			email: response.data.email,
-			id: response.data.id,
+			payload: {
+				name: response.data.name,
+				email: response.data.email,
+				id: response.data.id,
+			},
 		});
 	} catch (err) {
 		console.log(err);
@@ -52,9 +57,11 @@ export const getLoginStatus = () => async (dispatch) => {
 		if (response.data.currentUser) {
 			dispatch({
 				type: SIGN_IN,
-				name: response.data.name,
-				email: response.data.email,
-				id: response.data.id,
+				payload: {
+					name: response.data.name,
+					email: response.data.email,
+					id: response.data.id,
+				},
 			});
 		} else {
 			dispatch({
