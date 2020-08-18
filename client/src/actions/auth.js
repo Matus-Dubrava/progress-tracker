@@ -1,6 +1,6 @@
 import authServer from '../apis/authServer';
 
-import { SIGN_IN, SIGN_OUT } from './types';
+import { SIGN_IN, SIGN_OUT, SET_AUTH_FORM_MESSAGE } from './types';
 import history from '../history';
 
 export const signIn = ({ email, password }) => async (dispatch) => {
@@ -16,7 +16,17 @@ export const signIn = ({ email, password }) => async (dispatch) => {
 		});
 		history.push('/');
 	} catch (err) {
-		console.log(err);
+		// handle 422 status code by setting form error message
+		// this is due to error(s) made by user
+		if (err.response.status === 422) {
+			dispatch({
+				type: SET_AUTH_FORM_MESSAGE,
+				payload: err.response.data,
+			});
+		} else {
+			// this error was not expected
+			console.log(err);
+		}
 	}
 };
 
@@ -49,7 +59,17 @@ export const signUp = ({ name, email, password }) => async (dispatch) => {
 			},
 		});
 	} catch (err) {
-		console.log(err);
+		// handle 422 status code by setting form error message
+		// this is due to error(s) made by user
+		if (err.response.status === 422) {
+			dispatch({
+				type: SET_AUTH_FORM_MESSAGE,
+				payload: err.response.data,
+			});
+		} else {
+			// this error was not expected
+			console.log(err);
+		}
 	}
 };
 
@@ -76,4 +96,14 @@ export const getLoginStatus = () => async (dispatch) => {
 	} catch (err) {
 		console.log(err);
 	}
+};
+
+// Clear authentication form messages that appear in form component when
+// - invalid authentication credentials are supplied (signin)
+// - email address is taken  (signup)
+export const clearAuthFormMessage = () => {
+	return {
+		type: SET_AUTH_FORM_MESSAGE,
+		payload: [],
+	};
 };

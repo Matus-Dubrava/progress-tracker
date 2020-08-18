@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik } from 'formik';
 
 import './Signup.css';
 import { connect } from 'react-redux';
-import { signUp } from '../../actions';
+import { signUp, clearAuthFormMessage } from '../../actions';
 
-const Signup = ({ signUp }) => {
+const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
+	// clear authentication error messages when component is unmounted
+	// these should not persist when user navigates away
+	useEffect(
+		() => () => {
+			clearAuthFormMessage();
+		},
+		[]
+	);
+
+	const renderErrorMessages = () => {
+		return responseErrorMessages.map(({ message }) => {
+			return (
+				<li className="form-errors-item" key={message}>
+					{message}
+				</li>
+			);
+		});
+	};
+
 	return (
 		<div>
 			<Formik
@@ -65,6 +84,12 @@ const Signup = ({ signUp }) => {
 				}) => (
 					<form className="form" onSubmit={handleSubmit}>
 						<h3>Sign Up</h3>
+
+						{responseErrorMessages && (
+							<ul className="form-errors-list">
+								{renderErrorMessages()}
+							</ul>
+						)}
 
 						<div className="form-group">
 							<label>email</label>
@@ -141,4 +166,12 @@ const Signup = ({ signUp }) => {
 	);
 };
 
-export default connect(null, { signUp })(Signup);
+const mapStateToProps = (state) => {
+	return {
+		responseErrorMessages: state.authForm,
+	};
+};
+
+export default connect(mapStateToProps, { signUp, clearAuthFormMessage })(
+	Signup
+);
