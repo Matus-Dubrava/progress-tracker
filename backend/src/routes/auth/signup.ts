@@ -2,10 +2,10 @@ import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
-import { validateRequest } from '../middleware/validate-request';
-import { serializeUser } from '../services/serialize-user';
-import { User } from '../models/user';
-import { EmailTakenSignupError } from '../errors/email-taken-signup-error';
+import { validateRequest } from '../../middleware/validate-request';
+import { serializeUser } from '../../services/serialize-user';
+import { User } from '../../models/user';
+import { EmailTakenSignupError } from '../../errors/email-taken-signup-error';
 
 const router = Router();
 

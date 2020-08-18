@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
     proxy:
@@ -6,17 +6,17 @@ services:
             context: ./proxy
             dockerfile: Dockerfile
         ports:
-            - '80:80'
-            - '443:443'
+            - "80:80"
+            - "443:443"
         depends_on:
-            - auth
+            - backend
             - client
-    auth:
+    backend:
         build:
-            context: ./auth
+            context: ./backend
             dockerfile: Dockerfile.dev
         ports:
-            - '5000:5000'
+            - "5000:5000"
         environment:
             - PORT=5000
             - API_VERSION=v1
@@ -24,7 +24,7 @@ services:
             - JWT_KEY=jwttestkey12345
             - COOKIE_KEY=cookietestkey12345
         volumes:
-            - './auth/:/node/app'
+            - "./backend/:/node/app"
         depends_on:
             - db
     db:
@@ -32,7 +32,7 @@ services:
         logging:
             driver: none
         volumes:
-            - 'progress_tracker_mongo_auth_service:/data/db'
+            - "progress_tracker_mongo_auth_service:/data/db"
     client:
         build:
             context: ./client
@@ -40,11 +40,11 @@ services:
         stdin_open: true
         tty: true
         ports:
-            - '3000:3000'
+            - "3000:3000"
         volumes:
-            - './client:/react/app'
+            - "./client:/react/app"
         depends_on:
-            - auth
+            - backend
 
 volumes:
     progress_tracker_mongo_auth_service:

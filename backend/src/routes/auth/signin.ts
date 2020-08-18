@@ -2,11 +2,11 @@ import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
-import { validateRequest } from '../middleware/validate-request';
-import { User } from '../models/user';
-import { AuthenticationError } from '../errors/authentication-error';
-import { PasswordManager } from '../services/password-manager';
-import { serializeUser } from '../services/serialize-user';
+import { validateRequest } from '../../middleware/validate-request';
+import { User } from '../../models/user';
+import { AuthenticationError } from '../../errors/authentication-error';
+import { PasswordManager } from '../../services/password-manager';
+import { serializeUser } from '../../services/serialize-user';
 
 const router = Router();
 

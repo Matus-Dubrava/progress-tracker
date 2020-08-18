@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import { app } from '../../app';
+import { app } from '../../../app';
 import { config } from './config';
 
 it('should return current user set to null if the user is not signed in', async () => {

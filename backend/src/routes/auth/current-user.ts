@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 
-import { currentUser } from '../middleware/current-user';
+import { currentUser } from '../../middleware/current-user';
 
 const router = Router();
 

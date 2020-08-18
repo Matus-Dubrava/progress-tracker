@@ -5,10 +5,10 @@ import 'express-async-errors';
 import { createLogger, format, transports } from 'winston';
 const { combine, timestamp, printf } = format;
 
-import { signupRouter } from './routes/signup';
-import { signinRouter } from './routes/signin';
-import { currentUserRouter } from './routes/current-user';
-import { signoutRouter } from './routes/signout';
+import { signupRouter } from './routes/auth/signup';
+import { signinRouter } from './routes/auth/signin';
+import { currentUserRouter } from './routes/auth/current-user';
+import { signoutRouter } from './routes/auth/signout';
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
 
@@ -33,6 +33,7 @@ if (process.env.NODE_ENV !== 'test') {
 const app = express();
 const authBaseUrlPath = `/api/${process.env.API_VERSION}/auth`;
 
+// this app sits behind proxy
 app.set('trust proxy', true);
 
 app.use(json());
