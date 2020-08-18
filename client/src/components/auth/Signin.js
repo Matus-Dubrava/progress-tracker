@@ -3,17 +3,15 @@ import { Formik } from 'formik';
 
 import './Signup.css';
 import { connect } from 'react-redux';
-import { signUp } from '../../actions';
+import { signIn } from '../../actions';
 
-const Signup = ({ signUp }) => {
+const Signin = ({ signIn }) => {
 	return (
 		<div>
 			<Formik
 				initialValues={{
 					email: '',
-					name: '',
 					password: '',
-					repeatedPassword: '',
 				}}
 				validate={(values) => {
 					const errors = {};
@@ -27,31 +25,14 @@ const Signup = ({ signUp }) => {
 						errors.email = 'Invalid email address';
 					}
 
-					if (!values.name) {
-						errors.name = 'Required';
-					}
-
 					if (!values.password) {
 						errors.password = 'Required';
-					} else if (values.password.length < 8) {
-						errors.password =
-							'Short password (at least 8 characters are required)';
-					}
-
-					if (!values.repeatedPassword) {
-						errors.repeatedPassword = 'Required';
-					} else if (values.password !== values.repeatedPassword) {
-						errors.repeatedPassword = 'Passwords do not match';
 					}
 
 					return errors;
 				}}
 				onSubmit={(values, { setSubmitting }) => {
-					signUp({
-						name: values.name,
-						email: values.email,
-						password: values.password,
-					});
+					signIn({ email: values.email, password: values.password });
 					setSubmitting(false);
 				}}
 			>
@@ -64,7 +45,7 @@ const Signup = ({ signUp }) => {
 					handleSubmit,
 				}) => (
 					<form className="form" onSubmit={handleSubmit}>
-						<h3>Sign Up</h3>
+						<h3>Sign In</h3>
 
 						<div className="form-group">
 							<label>email</label>
@@ -78,21 +59,6 @@ const Signup = ({ signUp }) => {
 							{errors.email && touched.email ? (
 								<small className="field-error">
 									{errors.email}
-								</small>
-							) : null}
-						</div>
-						<div className="form-group">
-							<label>name</label>
-							<input
-								name="name"
-								className="form-control"
-								type="text"
-								value={values.name}
-								onChange={handleChange}
-							/>
-							{errors.name && touched.name ? (
-								<small className="field-error">
-									{errors.name}
 								</small>
 							) : null}
 						</div>
@@ -111,28 +77,12 @@ const Signup = ({ signUp }) => {
 								</small>
 							) : null}
 						</div>
-						<div className="form-group">
-							<label>repeat password</label>
-							<input
-								name="repeatedPassword"
-								className="form-control"
-								type="password"
-								value={values.repeatedPassword}
-								onChange={handleChange}
-							/>
-							{errors.repeatedPassword &&
-							touched.repeatedPassword ? (
-								<small className="field-error">
-									{errors.repeatedPassword}
-								</small>
-							) : null}
-						</div>
 						<button
 							className="btn btn-primary"
 							type="submit"
 							disabled={isSubmitting}
 						>
-							Sign Up
+							Sign In
 						</button>
 					</form>
 				)}
@@ -141,4 +91,4 @@ const Signup = ({ signUp }) => {
 	);
 };
 
-export default connect(null, { signUp })(Signup);
+export default connect(null, { signIn })(Signin);

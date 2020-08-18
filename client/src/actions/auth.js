@@ -3,7 +3,7 @@ import authServer from '../apis/authServer';
 import { SIGN_IN, SIGN_OUT } from './types';
 import history from '../history';
 
-export const signIn = (email, password) => async (dispatch) => {
+export const signIn = ({ email, password }) => async (dispatch) => {
 	try {
 		const response = await authServer.post('/signin', { email, password });
 		dispatch({
@@ -14,6 +14,7 @@ export const signIn = (email, password) => async (dispatch) => {
 				id: response.data.id,
 			},
 		});
+		history.push('/');
 	} catch (err) {
 		console.log(err);
 	}
@@ -31,7 +32,7 @@ export const signOut = () => async (dispath) => {
 	}
 };
 
-export const signUp = (name, email, password) => async (dispatch) => {
+export const signUp = ({ name, email, password }) => async (dispatch) => {
 	try {
 		const response = await authServer.post('/signup', {
 			email,

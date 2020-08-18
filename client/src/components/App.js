@@ -9,6 +9,7 @@ import SideNavigation from './SideNavigation';
 import TopNavigation from './TopNavigation';
 import Landing from './Landing';
 import Signup from './auth/Signup';
+import Signin from './auth/Signin';
 import { getLoginStatus } from '../actions';
 
 function App({ getLoginStatus }) {
@@ -29,6 +30,7 @@ function App({ getLoginStatus }) {
 						<Switch>
 							<Route path="/" exact component={Landing} />
 							<Route path="/signup" component={Signup} />
+							<Route path="/signin" component={Signin} />
 						</Switch>
 					</div>
 				</div>
