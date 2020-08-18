@@ -6,3 +6,14 @@
 	width: 60%;
 	margin: auto;
 }
+
+.form-errors-list {
+	list-style-type: none;
+	padding: 1rem 0;
+	margin: 0;
+}
+
+.form-errors-item {
+	color: orangered;
+	text-align: center;
+}

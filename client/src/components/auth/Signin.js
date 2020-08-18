@@ -3,9 +3,9 @@ import { Formik } from 'formik';
 
 import './Signup.css';
 import { connect } from 'react-redux';
-import { signUp, clearAuthFormMessage } from '../../actions';
+import { signIn, clearAuthFormMessage } from '../../actions';
 
-const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
+const Signin = ({ signIn, responseErrorMessages, clearAuthFormMessage }) => {
 	// clear authentication error messages when component is unmounted
 	// these should not persist when user navigates away
 	useEffect(
@@ -30,9 +30,7 @@ const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
 			<Formik
 				initialValues={{
 					email: '',
-					name: '',
 					password: '',
-					repeatedPassword: '',
 				}}
 				validate={(values) => {
 					const errors = {};
@@ -46,31 +44,14 @@ const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
 						errors.email = 'Invalid email address';
 					}
 
-					if (!values.name) {
-						errors.name = 'Required';
-					}
-
 					if (!values.password) {
 						errors.password = 'Required';
-					} else if (values.password.length < 8) {
-						errors.password =
-							'Short password (at least 8 characters are required)';
-					}
-
-					if (!values.repeatedPassword) {
-						errors.repeatedPassword = 'Required';
-					} else if (values.password !== values.repeatedPassword) {
-						errors.repeatedPassword = 'Passwords do not match';
 					}
 
 					return errors;
 				}}
 				onSubmit={(values, { setSubmitting }) => {
-					signUp({
-						name: values.name,
-						email: values.email,
-						password: values.password,
-					});
+					signIn({ email: values.email, password: values.password });
 					setSubmitting(false);
 				}}
 			>
@@ -83,7 +64,7 @@ const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
 					handleSubmit,
 				}) => (
 					<form className="form" onSubmit={handleSubmit}>
-						<h3>Sign Up</h3>
+						<h3>Sign In</h3>
 
 						{responseErrorMessages && (
 							<ul className="form-errors-list">
@@ -107,21 +88,6 @@ const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
 							) : null}
 						</div>
 						<div className="form-group">
-							<label>name</label>
-							<input
-								name="name"
-								className="form-control"
-								type="text"
-								value={values.name}
-								onChange={handleChange}
-							/>
-							{errors.name && touched.name ? (
-								<small className="field-error">
-									{errors.name}
-								</small>
-							) : null}
-						</div>
-						<div className="form-group">
 							<label>password</label>
 							<input
 								name="password"
@@ -136,28 +102,12 @@ const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
 								</small>
 							) : null}
 						</div>
-						<div className="form-group">
-							<label>repeat password</label>
-							<input
-								name="repeatedPassword"
-								className="form-control"
-								type="password"
-								value={values.repeatedPassword}
-								onChange={handleChange}
-							/>
-							{errors.repeatedPassword &&
-							touched.repeatedPassword ? (
-								<small className="field-error">
-									{errors.repeatedPassword}
-								</small>
-							) : null}
-						</div>
 						<button
 							className="btn btn-primary"
 							type="submit"
 							disabled={isSubmitting}
 						>
-							Sign Up
+							Sign In
 						</button>
 					</form>
 				)}
@@ -172,6 +122,6 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, { signUp, clearAuthFormMessage })(
-	Signup
+export default connect(mapStateToProps, { signIn, clearAuthFormMessage })(
+	Signin
 );

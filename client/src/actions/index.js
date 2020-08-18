@@ -1,1 +1,7 @@
-export { getLoginStatus, signIn, signOut, signUp } from './auth';
+export {
+	getLoginStatus,
+	signIn,
+	signOut,
+	signUp,
+	clearAuthFormMessage,
+} from './auth';
