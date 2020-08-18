@@ -13,10 +13,21 @@ const SideNavigation = ({ isSignedIn, name, email, signOut }) => {
 					{isSignedIn ? `Welcome, ${name}` : `anonymous`}
 				</div>
 			</div>
+			<div className="navigation-separator">Navigation</div>
 			<ul className="navigation-list">
 				<li className="navigation-item">
 					<Link className="navigation-link" to="/">
 						Home
+					</Link>
+				</li>
+				<li className="navigation-item active">
+					<Link className="navigation-link" to="/">
+						Test
+					</Link>
+				</li>
+				<li className="navigation-item">
+					<Link className="navigation-link" to="/">
+						Test
 					</Link>
 				</li>
 			</ul>

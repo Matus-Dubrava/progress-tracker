@@ -21,6 +21,7 @@ const TopNavigation = ({ isSignedIn, signOut }) => {
 								Sign Up
 							</Link>
 						</li>
+						/
 						<li className="top-navigation-item">
 							<Link className="top-navigation-link" to="/signin">
 								Sign In

@@ -5,6 +5,9 @@
 .form {
 	width: 60%;
 	margin: auto;
+	border: 1px solid #ddd;
+	padding: 1rem;
+	border-radius: 3px;
 }
 
 .form-errors-list {
