@@ -1,9 +1,11 @@
 import request from 'supertest';
-import jwt from 'jsonwebtoken';
 
 import { app } from '../../app';
 import { config } from './config';
-import { parseJwtValueFromCookieSession } from './helpers';
+import {
+	parseJwtValueFromCookieSession,
+	parseCookieSessionFromResponse,
+} from './helpers';
 
 it('returns 201 on successful signup', async () => {
 	return request(app)
@@ -114,10 +116,7 @@ it('should return cookie on successful signup with correct email stored in JWT',
 		})
 		.expect(201);
 
-	const session = response
-		.get('Set-Cookie')[0]
-		.split(';')[0]
-		.split('session=')[1];
+	const session = parseCookieSessionFromResponse(response);
 
 	const jwtValue = parseJwtValueFromCookieSession(session);
 

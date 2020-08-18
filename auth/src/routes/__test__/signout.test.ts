@@ -2,6 +2,7 @@ import request from 'supertest';
 
 import { app } from '../../app';
 import { config } from './config';
+import { parseCookieSessionFromResponse } from './helpers';
 
 it('should return 200 if the user is not signed in', async () => {
 	await request(app).get(config.signoutGetUrl).expect(200);
@@ -18,11 +19,7 @@ it('should remove cookie if the user is signed in', async () => {
 		.expect(201);
 
 	const response = await request(app).get(config.signoutGetUrl).expect(200);
-
-	const session = response
-		.get('Set-Cookie')[0]
-		.split(';')[0]
-		.split('session=')[1];
+	const session = parseCookieSessionFromResponse(response);
 
 	expect(session).toEqual('');
 });

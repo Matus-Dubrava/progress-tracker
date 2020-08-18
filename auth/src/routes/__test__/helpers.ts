@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { Response } from 'supertest';
 
 export const parseJwtValueFromCookieSession = (session: string) => {
 	const buf = Buffer.from(session, 'base64');
@@ -11,4 +12,8 @@ export const parseJwtValueFromCookieSession = (session: string) => {
 		iat: number;
 	};
 	return val;
+};
+
+export const parseCookieSessionFromResponse = (response: Response) => {
+	return response.get('Set-Cookie')[0].split(';')[0].split('sess=')[1];
 };

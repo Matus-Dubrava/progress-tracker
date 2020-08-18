@@ -2,7 +2,10 @@ import request from 'supertest';
 
 import { app } from '../../app';
 import { config } from './config';
-import { parseJwtValueFromCookieSession } from './helpers';
+import {
+	parseJwtValueFromCookieSession,
+	parseCookieSessionFromResponse,
+} from './helpers';
 
 beforeEach(async () => {
 	await request(app)
@@ -25,7 +28,7 @@ it('should return 200 on successfull signup', async () => {
 		.expect(200);
 });
 
-it('should return cookie on successful signup with correct email stored in JWT', async () => {
+it('should return cookie on successful signin with correct email stored in JWT', async () => {
 	const response = await request(app)
 		.post(config.signinPostUrl)
 		.send({
@@ -34,11 +37,7 @@ it('should return cookie on successful signup with correct email stored in JWT',
 		})
 		.expect(200);
 
-	const session = response
-		.get('Set-Cookie')[0]
-		.split(';')[0]
-		.split('session=')[1];
-
+	const session = parseCookieSessionFromResponse(response);
 	const jwtValue = parseJwtValueFromCookieSession(session);
 
 	expect(jwtValue.email).toEqual(config.testEmail);

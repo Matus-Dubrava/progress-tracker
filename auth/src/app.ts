@@ -1,6 +1,5 @@
 import express from 'express';
 import { json } from 'body-parser';
-import cors from 'cors';
 import cookieSession from 'cookie-session';
 import 'express-async-errors';
 import { createLogger, format, transports } from 'winston';
@@ -22,8 +21,14 @@ export const logger = createLogger({
 		service: 'auth-service',
 	},
 	format: combine(timestamp(), loggingFormat),
-	transports: [new transports.Console()],
 });
+
+if (process.env.NODE_ENV !== 'test') {
+	logger.add(new transports.Console());
+} else {
+	// don't need winston logs in test environment, send it to /dev/null
+	logger.add(new transports.File({ filename: '/dev/null' }));
+}
 
 const app = express();
 const authBaseUrlPath = `/api/${process.env.API_VERSION}/auth`;
@@ -36,7 +41,8 @@ app.use(
 		// keys: [process.env.COOKIE_KEY!],
 		keys: ['12345'],
 		httpOnly: true,
-		secure: true,
+		secure: process.env.NODE_ENV !== 'test',
+		signed: process.env.NODE_ENV !== 'test',
 	})
 );
 
