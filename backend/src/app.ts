@@ -9,6 +9,7 @@ import { signupRouter } from './routes/auth/signup';
 import { signinRouter } from './routes/auth/signin';
 import { currentUserRouter } from './routes/auth/current-user';
 import { signoutRouter } from './routes/auth/signout';
+import { createProjectRouter } from './routes/projects/create-project';
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
 
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 const app = express();
 const authBaseUrlPath = `/api/${process.env.API_VERSION}/auth`;
+const projectBaseUrlPath = `/api/${process.env.API_VERSION}`;
 
 // this app sits behind proxy
 app.set('trust proxy', true);
@@ -53,10 +55,14 @@ app.use((req, res, next) => {
 	next();
 });
 
+// auth routes
 app.use(authBaseUrlPath, signupRouter);
 app.use(authBaseUrlPath, signinRouter);
 app.use(authBaseUrlPath, currentUserRouter);
 app.use(authBaseUrlPath, signoutRouter);
+
+// project routes
+app.use(projectBaseUrlPath, createProjectRouter);
 
 // health check route
 app.get(`${authBaseUrlPath}/health`, (req, res) => {

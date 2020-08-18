@@ -14,7 +14,7 @@ export interface ProjectDocument extends mongoose.Document {
 	ownerId: string;
 	name: string;
 	description: string;
-	dateStarted: Date;
+	dateCreated: Date;
 	dateUpdated: Date;
 	dateFinished: Date;
 	isFinished: boolean;
@@ -24,7 +24,7 @@ const projectSchema = new mongoose.Schema({
 	ownerId: { type: Schema.Types.ObjectId },
 	name: { type: String, required: true, unique: true },
 	description: { type: String, required: true },
-	dateStarted: { type: Date, default: Date.now, required: true },
+	dateCreated: { type: Date, default: Date.now, required: true },
 	dateUpdated: { type: Date, default: Date.now, required: true },
 	dateFinished: { type: Date, required: false },
 	isFinished: { type: Boolean, default: false, require: true },
