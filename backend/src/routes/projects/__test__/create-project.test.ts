@@ -41,7 +41,7 @@ it('should create project correctly', async () => {
 	expect(project.name).toEqual(projectConfig.testProjectName);
 	expect(project.ownerId).toEqual(userId);
 	expect(project.isFinished).toBeFalsy();
-	expect(project.dateFinished).toBeNull();
+	expect(project.dateFinished).toBeUndefined();
 	expect(project.dateCreated.split('T')[0]).toEqual(currentDate);
 	expect(project.dateUpdated.split('T')[0]).toEqual(currentDate);
 	expect(project.id).not.toBeNull();
@@ -78,12 +78,17 @@ it('should fail with 422 if any of the required attributes is not set [name, des
 
 it('should fail with 422 if supplied owner id does not belong to any existing user', async () => {
 	await request(app)
+		.delete(`${userConfig.baseAuthUrl}/${userId}`)
+		.set('Cookie', cookie)
+		.expect(204);
+
+	await request(app)
 		.post(projectConfig.baseProjectUrl)
 		.set('Cookie', cookie)
 		.send({
 			name: projectConfig.testProjectName,
 			description: projectConfig.testProjectDescription,
-			ownerId: `${userId}a`,
+			ownerId: `${userId}`,
 		})
 		.expect(422);
 });
