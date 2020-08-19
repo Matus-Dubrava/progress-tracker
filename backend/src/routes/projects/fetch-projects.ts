@@ -3,6 +3,7 @@ import { Router, Request, Response } from 'express';
 import { currentUser } from '../../middleware/current-user';
 import { requireAuth } from '../../middleware/require-auth';
 import { Project } from '../../models/project';
+import { serializeProject } from '../../services/serialize-project';
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.get(
 			ownerId: userId,
 		}).sort({ dateCreated: -1 });
 
-		return res.send(projects);
+		return res.send(projects.map(serializeProject));
 	}
 );
 
