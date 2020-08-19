@@ -100,3 +100,22 @@ it('should return 403 forbidden if user is not signed in', async () => {
 
 	await request(app).get(projectConfig.baseProjectUrl).expect(403);
 });
+
+it('should return empty list if user does not have any projects', async () => {
+	await request(app)
+		.post(projectConfig.baseProjectUrl)
+		.set('Cookie', cookieUserA)
+		.send({
+			ownerId: userAId,
+			name: projectConfig.testProjectName1,
+			description: projectConfig.testProjectDescription,
+		})
+		.expect(201);
+
+	const response = await request(app)
+		.get(projectConfig.baseProjectUrl)
+		.set('Cookie', cookieUserB)
+		.expect(200);
+
+	expect(response.body.length).toEqual(0);
+});
