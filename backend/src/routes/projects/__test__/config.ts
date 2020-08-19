@@ -6,6 +6,8 @@ const config = {
 	testProjectName2: 'test name 2',
 	testProjectName3: 'test name 3',
 	testProjectDescription: 'test description',
+	testProjectId: '5f3d5a6a5aa86a1250e113ea',
+	testProjectInvalidId: '12',
 };
 
 export { config };

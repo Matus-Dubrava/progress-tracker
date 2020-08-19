@@ -1,8 +1,8 @@
 import request from 'supertest';
 
 import { app } from '../../../app';
-import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from './config';
+import { config as userConfig } from '../../auth/__test__/config';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 import { createProject } from './helpers';
 
@@ -36,63 +36,67 @@ beforeEach(async () => {
 	userBId = response.body.id;
 	cookieUserB = parseCookieFromResponse(response);
 });
-it('should return project successfully', async () => {
-	let response = await createProject(
+
+it('should delete project successfully and return 204', async () => {
+	const response = await createProject(
 		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
 	const projectId = response.body.id;
 
-	response = await request(app)
+	await request(app)
+		.delete(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.set('Cookie', cookieUserA)
+		.expect(204);
+
+	await request(app)
 		.get(`${projectConfig.baseProjectUrl}/${projectId}`)
 		.set('Cookie', cookieUserA)
-		.expect(200);
-
-	expect(response.body.id).toEqual(projectId);
-	expect(response.body.name).toEqual(projectConfig.testProjectName1);
-	expect(response.body.ownerId).toEqual(userAId);
+		.expect(404);
 });
 
-it('should fail with 403 forbidden when no cookie is present', async () => {
-	let response = await createProject(
+it('should return 403 if valid cookie is not present', async () => {
+	const response = await createProject(
 		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
-	const projectId = response.body._id;
+	const projectId = response.body.id;
 
-	response = await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectId}`)
+	await request(app)
+		.delete(`${projectConfig.baseProjectUrl}/${projectId}`)
 		.expect(403);
 });
 
-it('should fail with 403 if user requesting a project is not its owner', async () => {
-	let response = await createProject(
+it("should return 404 if specified project doesn't exist", async () => {
+	await request(app)
+		.delete(
+			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectId}`
+		)
+		.set('Cookie', cookieUserA)
+		.expect(404);
+});
+
+it('should return 403 if user tries to delete project that it is not the owner of', async () => {
+	const response = await createProject(
 		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
 	const projectId = response.body.id;
 
-	response = await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectId}`)
+	await request(app)
+		.delete(`${projectConfig.baseProjectUrl}/${projectId}`)
 		.set('Cookie', cookieUserB)
 		.expect(403);
 });
 
 it('should fail with 422 if ID of the project is not 24 characters long', async () => {
 	await request(app)
-		.get(
+		.delete(
 			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectInvalidId}`
 		)
 		.set('Cookie', cookieUserA)
 		.expect(422);
-});
-
-it('should fail with 404 if project with given id does not exist', async () => {
-	await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectConfig.testProjectId}`)
-		.set('Cookie', cookieUserA)
-		.expect(404);
 });

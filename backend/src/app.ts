@@ -14,6 +14,7 @@ import { deleteUserRouter } from './routes/auth/delete-user';
 import { createProjectRouter } from './routes/projects/create-project';
 import { fetchProjectsRouter } from './routes/projects/fetch-projects';
 import { fetchProjectRouter } from './routes/projects/fetch-project';
+import { deleteProjectRouter } from './routes/projects/delete-project';
 
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
@@ -71,6 +72,7 @@ app.use(authBaseUrlPath, deleteUserRouter);
 app.use(projectBaseUrlPath, createProjectRouter);
 app.use(projectBaseUrlPath, fetchProjectsRouter);
 app.use(projectBaseUrlPath, fetchProjectRouter);
+app.use(projectBaseUrlPath, deleteProjectRouter);
 
 // health check route
 app.get(`${authBaseUrlPath}/health`, (req, res) => {
