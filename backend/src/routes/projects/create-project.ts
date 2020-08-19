@@ -7,6 +7,7 @@ import { currentUser } from '../../middleware/current-user';
 import { requireAuth } from '../../middleware/require-auth';
 import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
 import { User } from '../../models/user';
+import { serializeProject } from '../../services/serialize-project';
 
 const router = Router();
 
@@ -46,7 +47,7 @@ router.post(
 			ownerId,
 		}).save();
 
-		return res.status(201).send(project);
+		return res.status(201).send(serializeProject(project));
 	}
 );
 

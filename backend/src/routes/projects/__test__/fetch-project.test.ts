@@ -42,7 +42,7 @@ it('should return project successfully', async () => {
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
-	const projectId = response.body._id;
+	const projectId = response.body.id;
 
 	response = await request(app)
 		.get(`${projectConfig.baseProjectUrl}/${projectId}`)
@@ -73,7 +73,7 @@ it('should fail with 403 if user requesting a project is not its owner', async (
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
-	const projectId = response.body._id;
+	const projectId = response.body.id;
 
 	response = await request(app)
 		.get(`${projectConfig.baseProjectUrl}/${projectId}`)
