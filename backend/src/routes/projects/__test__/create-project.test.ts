@@ -28,7 +28,7 @@ it('should create project correctly', async () => {
 		.post(projectConfig.baseProjectUrl)
 		.set('Cookie', cookie)
 		.send({
-			name: projectConfig.testProjectName,
+			name: projectConfig.testProjectName1,
 			description: projectConfig.testProjectDescription,
 			ownerId: userId,
 		})
@@ -38,7 +38,7 @@ it('should create project correctly', async () => {
 
 	const currentDate = moment().format().split('T')[0];
 
-	expect(project.name).toEqual(projectConfig.testProjectName);
+	expect(project.name).toEqual(projectConfig.testProjectName1);
 	expect(project.ownerId).toEqual(userId);
 	expect(project.isFinished).toBeFalsy();
 	expect(project.dateFinished).toBeUndefined();
@@ -61,7 +61,7 @@ it('should fail with 422 if any of the required attributes is not set [name, des
 		.post(projectConfig.baseProjectUrl)
 		.set('Cookie', cookie)
 		.send({
-			name: projectConfig.testProjectName,
+			name: projectConfig.testProjectName1,
 			ownerId: userId,
 		})
 		.expect(422);
@@ -70,7 +70,7 @@ it('should fail with 422 if any of the required attributes is not set [name, des
 		.post(projectConfig.baseProjectUrl)
 		.set('Cookie', cookie)
 		.send({
-			name: projectConfig.testProjectName,
+			name: projectConfig.testProjectName1,
 			description: projectConfig.testProjectDescription,
 		})
 		.expect(422);
@@ -86,7 +86,7 @@ it('should fail with 422 if supplied owner id does not belong to any existing us
 		.post(projectConfig.baseProjectUrl)
 		.set('Cookie', cookie)
 		.send({
-			name: projectConfig.testProjectName,
+			name: projectConfig.testProjectName1,
 			description: projectConfig.testProjectDescription,
 			ownerId: `${userId}`,
 		})
@@ -98,7 +98,7 @@ it('should fail with 422 if project with supplied name already exists', async ()
 		.post(projectConfig.baseProjectUrl)
 		.set('Cookie', cookie)
 		.send({
-			name: projectConfig.testProjectName,
+			name: projectConfig.testProjectName1,
 			description: projectConfig.testProjectDescription,
 			ownerId: userId,
 		})
@@ -108,7 +108,7 @@ it('should fail with 422 if project with supplied name already exists', async ()
 		.post(projectConfig.baseProjectUrl)
 		.set('Cookie', cookie)
 		.send({
-			name: projectConfig.testProjectName,
+			name: projectConfig.testProjectName1,
 			description: projectConfig.testProjectDescription,
 			ownerId: userId,
 		})
@@ -119,7 +119,7 @@ it('should fail with 403 if user is not signed in', async () => {
 	await request(app)
 		.post(projectConfig.baseProjectUrl)
 		.send({
-			name: projectConfig.testProjectName,
+			name: projectConfig.testProjectName1,
 			description: projectConfig.testProjectDescription,
 			ownerId: userId,
 		})

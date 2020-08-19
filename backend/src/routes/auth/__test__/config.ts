@@ -8,6 +8,7 @@ const config = {
 	baseAuthUrl: `/api/${API_VERSION}/auth`,
 
 	testEmail: 'test@test.com',
+	testEmail2: 'adming@test.com',
 	testPassword: 'testpassword12345',
 	testName: 'testname',
 	invalidTestEmail: '12345',

@@ -10,7 +10,10 @@ import { signinRouter } from './routes/auth/signin';
 import { currentUserRouter } from './routes/auth/current-user';
 import { signoutRouter } from './routes/auth/signout';
 import { deleteUserRouter } from './routes/auth/delete-user';
+
 import { createProjectRouter } from './routes/projects/create-project';
+import { fetchProjectsRouter } from './routes/projects/fetch-projects';
+
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
 
@@ -65,6 +68,7 @@ app.use(authBaseUrlPath, deleteUserRouter);
 
 // project routes
 app.use(projectBaseUrlPath, createProjectRouter);
+app.use(projectBaseUrlPath, fetchProjectsRouter);
 
 // health check route
 app.get(`${authBaseUrlPath}/health`, (req, res) => {
