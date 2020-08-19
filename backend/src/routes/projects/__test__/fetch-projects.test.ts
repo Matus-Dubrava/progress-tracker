@@ -4,6 +4,8 @@ import { app } from '../../../app';
 import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from './config';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
+import { createProject } from './helpers';
+import { create } from 'domain';
 
 let userAId: string;
 let userBId: string;
@@ -37,35 +39,9 @@ beforeEach(async () => {
 });
 
 it('should return all projects that belong to the user that is requesting them', async () => {
-	await request(app)
-		.post(projectConfig.baseProjectUrl)
-		.set('Cookie', cookieUserA)
-		.send({
-			ownerId: userAId,
-			name: projectConfig.testProjectName1,
-			description: projectConfig.testProjectDescription,
-		})
-		.expect(201);
-
-	await request(app)
-		.post(projectConfig.baseProjectUrl)
-		.set('Cookie', cookieUserA)
-		.send({
-			ownerId: userAId,
-			name: projectConfig.testProjectName2,
-			description: projectConfig.testProjectDescription,
-		})
-		.expect(201);
-
-	await request(app)
-		.post(projectConfig.baseProjectUrl)
-		.set('Cookie', cookieUserB)
-		.send({
-			ownerId: userBId,
-			name: projectConfig.testProjectName3,
-			description: projectConfig.testProjectDescription,
-		})
-		.expect(201);
+	await createProject(userAId, cookieUserA, projectConfig.testProjectName1);
+	await createProject(userAId, cookieUserA, projectConfig.testProjectName2);
+	await createProject(userBId, cookieUserB, projectConfig.testProjectName3);
 
 	// test user A
 	let response = await request(app)
@@ -88,29 +64,11 @@ it('should return all projects that belong to the user that is requesting them',
 });
 
 it('should return 403 forbidden if user is not signed in', async () => {
-	await request(app)
-		.post(projectConfig.baseProjectUrl)
-		.set('Cookie', cookieUserA)
-		.send({
-			ownerId: userAId,
-			name: projectConfig.testProjectName1,
-			description: projectConfig.testProjectDescription,
-		})
-		.expect(201);
-
 	await request(app).get(projectConfig.baseProjectUrl).expect(403);
 });
 
 it('should return empty list if user does not have any projects', async () => {
-	await request(app)
-		.post(projectConfig.baseProjectUrl)
-		.set('Cookie', cookieUserA)
-		.send({
-			ownerId: userAId,
-			name: projectConfig.testProjectName1,
-			description: projectConfig.testProjectDescription,
-		})
-		.expect(201);
+	await createProject(userAId, cookieUserA, projectConfig.testProjectName1);
 
 	const response = await request(app)
 		.get(projectConfig.baseProjectUrl)
