@@ -2,7 +2,10 @@ import request from 'supertest';
 
 import { app } from '../../../app';
 import { config } from './config';
-import { parseCookieFromResponse } from './helpers';
+import {
+	parseCookieFromResponse,
+	parseCookieSessionFromResponse,
+} from './helpers';
 import { User } from '../../../models/user';
 
 let userId: string;
@@ -30,6 +33,16 @@ it('should delete user successfully and return 204', async () => {
 
 	const user = await User.findById(userId);
 	expect(user).toBeNull();
+});
+
+it('should invalidate cookie once the user is deleted', async () => {
+	const response = await request(app)
+		.delete(`${config.baseAuthUrl}/${userId}`)
+		.set('Cookie', cookie)
+		.expect(204);
+
+	const session = parseCookieSessionFromResponse(response);
+	expect(session).toEqual('');
 });
 
 it("should return 204 even if the user doesn't exist", async () => {
