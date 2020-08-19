@@ -9,6 +9,7 @@ import { signupRouter } from './routes/auth/signup';
 import { signinRouter } from './routes/auth/signin';
 import { currentUserRouter } from './routes/auth/current-user';
 import { signoutRouter } from './routes/auth/signout';
+import { deleteUserRouter } from './routes/auth/delete-user';
 import { createProjectRouter } from './routes/projects/create-project';
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
@@ -60,6 +61,7 @@ app.use(authBaseUrlPath, signupRouter);
 app.use(authBaseUrlPath, signinRouter);
 app.use(authBaseUrlPath, currentUserRouter);
 app.use(authBaseUrlPath, signoutRouter);
+app.use(authBaseUrlPath, deleteUserRouter);
 
 // project routes
 app.use(projectBaseUrlPath, createProjectRouter);

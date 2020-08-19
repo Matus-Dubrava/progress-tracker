@@ -5,6 +5,7 @@ const config = {
 	signupPostUrl: `/api/${API_VERSION}/auth/signup`,
 	currentUserGetUrl: `/api/${API_VERSION}/auth/current-user`,
 	signinPostUrl: `/api/${API_VERSION}/auth/signin`,
+	baseAuthUrl: `/api/${API_VERSION}/auth`,
 
 	testEmail: 'test@test.com',
 	testPassword: 'testpassword12345',
