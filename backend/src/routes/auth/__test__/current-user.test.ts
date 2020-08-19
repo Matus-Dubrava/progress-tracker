@@ -2,6 +2,7 @@ import request from 'supertest';
 
 import { app } from '../../../app';
 import { config } from './config';
+import { parseCookieFromResponse } from './helpers';
 
 it('should return current user set to null if the user is not signed in', async () => {
 	const response = await request(app)
@@ -18,11 +19,7 @@ it('should correctly return current user when the user is signed in', async () =
 		password: config.testPassword,
 	});
 
-	// parse cookie from response header
-	const cookie = response
-		.get('Set-Cookie')
-		.map((cookieString) => cookieString.split(';')[0])
-		.join('; ');
+	const cookie = parseCookieFromResponse(response);
 
 	response = await request(app)
 		.get(config.currentUserGetUrl)
@@ -43,11 +40,7 @@ it('should return currentuser with name, email, and password', async () => {
 		})
 		.expect(201);
 
-	// parse cookie from response header
-	const cookie = response
-		.get('Set-Cookie')
-		.map((cookieString) => cookieString.split(';')[0])
-		.join('; ');
+	const cookie = parseCookieFromResponse(response);
 
 	response = await request(app)
 		.get(config.currentUserGetUrl)

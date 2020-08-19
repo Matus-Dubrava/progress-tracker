@@ -17,3 +17,10 @@ export const parseJwtValueFromCookieSession = (session: string) => {
 export const parseCookieSessionFromResponse = (response: Response) => {
 	return response.get('Set-Cookie')[0].split(';')[0].split('sess=')[1];
 };
+
+export const parseCookieFromResponse = (response: Response): string => {
+	return response
+		.get('Set-Cookie')
+		.map((cookieString) => cookieString.split(';')[0])
+		.join('; ');
+};
