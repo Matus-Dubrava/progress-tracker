@@ -4,8 +4,10 @@ import moment from 'moment';
 import { app } from '../../../app';
 import { config as projectConfig } from './config';
 import { config as userConfig } from '../../auth/__test__/config';
+import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
 let userId: string;
+let cookie: string;
 
 beforeEach(async () => {
 	let response = await request(app)
@@ -18,11 +20,13 @@ beforeEach(async () => {
 		.expect(201);
 
 	userId = response.body.id;
+	cookie = parseCookieFromResponse(response);
 });
 
 it('should create project correctly', async () => {
 	const response = await request(app)
 		.post(projectConfig.baseProjectUrl)
+		.set('Cookie', cookie)
 		.send({
 			name: projectConfig.testProjectName,
 			description: projectConfig.testProjectDescription,
@@ -43,10 +47,76 @@ it('should create project correctly', async () => {
 	expect(project.id).not.toBeNull();
 });
 
-it('should fail with 422 if any of the required attributes is not set [name, description, ownerId]', async () => {});
+it('should fail with 422 if any of the required attributes is not set [name, description, ownerId]', async () => {
+	await request(app)
+		.post(projectConfig.baseProjectUrl)
+		.set('Cookie', cookie)
+		.send({
+			description: projectConfig.testProjectDescription,
+			ownerId: userId,
+		})
+		.expect(422);
 
-it('should fail with 422 if supplied owner id does not belong to any existing user', async () => {});
+	await request(app)
+		.post(projectConfig.baseProjectUrl)
+		.set('Cookie', cookie)
+		.send({
+			name: projectConfig.testProjectName,
+			ownerId: userId,
+		})
+		.expect(422);
 
-it('should fail with 422 if project with supplied name already exists', async () => {});
+	await request(app)
+		.post(projectConfig.baseProjectUrl)
+		.set('Cookie', cookie)
+		.send({
+			name: projectConfig.testProjectName,
+			description: projectConfig.testProjectDescription,
+		})
+		.expect(422);
+});
 
-it('should fail with 403 if user is not signed in', async () => {});
+it('should fail with 422 if supplied owner id does not belong to any existing user', async () => {
+	await request(app)
+		.post(projectConfig.baseProjectUrl)
+		.set('Cookie', cookie)
+		.send({
+			name: projectConfig.testProjectName,
+			description: projectConfig.testProjectDescription,
+			ownerId: `${userId}a`,
+		})
+		.expect(422);
+});
+
+it('should fail with 422 if project with supplied name already exists', async () => {
+	await request(app)
+		.post(projectConfig.baseProjectUrl)
+		.set('Cookie', cookie)
+		.send({
+			name: projectConfig.testProjectName,
+			description: projectConfig.testProjectDescription,
+			ownerId: userId,
+		})
+		.expect(201);
+
+	await request(app)
+		.post(projectConfig.baseProjectUrl)
+		.set('Cookie', cookie)
+		.send({
+			name: projectConfig.testProjectName,
+			description: projectConfig.testProjectDescription,
+			ownerId: userId,
+		})
+		.expect(422);
+});
+
+it('should fail with 403 if user is not signed in', async () => {
+	await request(app)
+		.post(projectConfig.baseProjectUrl)
+		.send({
+			name: projectConfig.testProjectName,
+			description: projectConfig.testProjectDescription,
+			ownerId: userId,
+		})
+		.expect(403);
+});
