@@ -5,7 +5,6 @@ import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from './config';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 import { createProject } from './helpers';
-import { create } from 'domain';
 
 let userAId: string;
 let userBId: string;
