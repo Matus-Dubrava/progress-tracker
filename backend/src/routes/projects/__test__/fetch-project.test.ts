@@ -77,13 +77,20 @@ it('should fail with 403 if user requesting a project is not its owner', async (
 
 	response = await request(app)
 		.get(`${projectConfig.baseProjectUrl}/${projectId}`)
-		.set('Cookie', userBId)
+		.set('Cookie', cookieUserB)
 		.expect(403);
+});
+
+it('should fail with 422 if ID of the project is not 24 characters long', async () => {
+	await request(app)
+		.get(`${projectConfig.baseProjectUrl}/12`)
+		.set('Cookie', cookieUserA)
+		.expect(422);
 });
 
 it('should fail with 404 if project with given id does not exist', async () => {
 	await request(app)
-		.get(`${projectConfig.baseProjectUrl}/1`)
-		.set('Cookie', userAId)
+		.get(`${projectConfig.baseProjectUrl}/5f3d5a6a5aa86a1250e113ea`)
+		.set('Cookie', cookieUserA)
 		.expect(404);
 });
