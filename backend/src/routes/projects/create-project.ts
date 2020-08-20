@@ -18,7 +18,6 @@ router.post(
 		body('description')
 			.notEmpty()
 			.withMessage('Description field is required'),
-		body('ownerId').notEmpty().withMessage('OwnerId field is required'),
 	],
 	validateRequest,
 	currentUser,

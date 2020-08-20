@@ -47,13 +47,12 @@ it('should create project correctly', async () => {
 	expect(project.id).not.toBeNull();
 });
 
-it('should fail with 422 if any of the required attributes is not set [name, description, ownerId]', async () => {
+it('should fail with 422 if any of the required attributes is not set [name, description]', async () => {
 	await request(app)
 		.post(projectConfig.baseProjectUrl)
 		.set('Cookie', cookie)
 		.send({
 			description: projectConfig.testProjectDescription,
-			ownerId: userId,
 		})
 		.expect(422);
 
@@ -62,16 +61,6 @@ it('should fail with 422 if any of the required attributes is not set [name, des
 		.set('Cookie', cookie)
 		.send({
 			name: projectConfig.testProjectName1,
-			ownerId: userId,
-		})
-		.expect(422);
-
-	await request(app)
-		.post(projectConfig.baseProjectUrl)
-		.set('Cookie', cookie)
-		.send({
-			name: projectConfig.testProjectName1,
-			description: projectConfig.testProjectDescription,
 		})
 		.expect(422);
 });
