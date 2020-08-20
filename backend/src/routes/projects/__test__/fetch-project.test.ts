@@ -60,7 +60,7 @@ it('should fail with 403 forbidden when no cookie is present', async () => {
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
-	const projectId = response.body._id;
+	const projectId = response.body.id;
 
 	response = await request(app)
 		.get(`${projectConfig.baseProjectUrl}/${projectId}`)
