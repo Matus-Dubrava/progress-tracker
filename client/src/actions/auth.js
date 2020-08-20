@@ -1,11 +1,14 @@
-import authServer from '../apis/authServer';
+import authServer from '../apis/backedServer';
 
 import { SIGN_IN, SIGN_OUT, SET_AUTH_FORM_MESSAGE } from './types';
 import history from '../history';
 
 export const signIn = ({ email, password }) => async (dispatch) => {
 	try {
-		const response = await authServer.post('/signin', { email, password });
+		const response = await authServer.post('/auth/signin', {
+			email,
+			password,
+		});
 		dispatch({
 			type: SIGN_IN,
 			payload: {
@@ -32,7 +35,7 @@ export const signIn = ({ email, password }) => async (dispatch) => {
 
 export const signOut = () => async (dispath) => {
 	try {
-		await authServer.get('/signout');
+		await authServer.get('/auth/signout');
 		history.push('/');
 		dispath({
 			type: SIGN_OUT,
@@ -44,7 +47,7 @@ export const signOut = () => async (dispath) => {
 
 export const signUp = ({ name, email, password }) => async (dispatch) => {
 	try {
-		const response = await authServer.post('/signup', {
+		const response = await authServer.post('/auth/signup', {
 			email,
 			name,
 			password,
@@ -76,7 +79,7 @@ export const signUp = ({ name, email, password }) => async (dispatch) => {
 export const getLoginStatus = () => async (dispatch) => {
 	try {
 		console.log('getting login status');
-		const response = await authServer.get('/current-user');
+		const response = await authServer.get('/auth/current-user');
 
 		if (response.data.currentUser) {
 			const { currentUser } = response.data;

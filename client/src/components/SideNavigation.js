@@ -21,8 +21,8 @@ const SideNavigation = ({ isSignedIn, name, email, signOut }) => {
 					</Link>
 				</li>
 				<li className="navigation-item active">
-					<Link className="navigation-link" to="/">
-						Test
+					<Link className="navigation-link" to="/projects">
+						Projects
 					</Link>
 				</li>
 				<li className="navigation-item">

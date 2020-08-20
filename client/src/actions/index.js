@@ -5,3 +5,5 @@ export {
 	signUp,
 	clearAuthFormMessage,
 } from './auth';
+
+export { fetchProjects } from './projects';
