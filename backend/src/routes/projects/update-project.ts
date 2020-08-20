@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import { currentUser } from '../../middleware/current-user';
 import { requireAuth } from '../../middleware/require-auth';
+import { validateMongoId } from '../../middleware/validate-mongo-id';
 import { validateRequest } from '../../middleware/validate-request';
 import { Project } from '../../models/project';
 import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
@@ -17,6 +18,7 @@ router.post(
 	'/projects/:id',
 	currentUser,
 	requireAuth,
+	validateMongoId,
 	[
 		body('name')
 			.isEmpty()
@@ -26,12 +28,6 @@ router.post(
 	async (req: Request, res: Response) => {
 		const { id } = req.params;
 		const { description, isFinished } = req.body;
-
-		if (id.length !== 24) {
-			throw new CustomRequestValidationError(
-				'incorrect project ID format, expected 24 characters long hex string'
-			);
-		}
 
 		const project = await Project.findById(id);
 
@@ -43,6 +39,8 @@ router.post(
 			throw new ForbiddenResourceError();
 		}
 
+		// not using omit true because we may want to set dateFinished to undefined
+		// when isFinished is set to false
 		const updatedProject = await Project.findByIdAndUpdate(
 			id,
 			{

@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 
 import { currentUser } from '../../middleware/current-user';
 import { requireAuth } from '../../middleware/require-auth';
+import { validateMongoId } from '../../middleware/validate-mongo-id';
 import { Project } from '../../models/project';
 import { NotFoundError } from '../../errors/not-found-error';
 import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
@@ -14,14 +15,9 @@ router.get(
 	'/projects/:id',
 	currentUser,
 	requireAuth,
+	validateMongoId,
 	async (req: Request, res: Response) => {
 		const { id } = req.params;
-
-		if (id.length !== 24) {
-			throw new CustomRequestValidationError(
-				'incorrect project ID format, expected 24 characters long hex string'
-			);
-		}
 
 		const project = await Project.findById(id);
 

@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 
 import { requireAuth } from '../../middleware/require-auth';
 import { currentUser } from '../../middleware/current-user';
+import { validateMongoId } from '../../middleware/validate-mongo-id';
 import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
 import { NotFoundError } from '../../errors/not-found-error';
 import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
@@ -13,14 +14,9 @@ router.delete(
 	'/projects/:id',
 	currentUser,
 	requireAuth,
+	validateMongoId,
 	async (req: Request, res: Response) => {
 		const { id } = req.params;
-
-		if (id.length !== 24) {
-			throw new CustomRequestValidationError(
-				'incorrect project ID format, expected 24 characters long hex string'
-			);
-		}
 
 		const project = await Project.findById(id);
 
