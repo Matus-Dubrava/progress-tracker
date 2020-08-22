@@ -11,6 +11,7 @@ import Landing from './Landing';
 import Signup from './auth/Signup';
 import Signin from './auth/Signin';
 import ProjectList from './projects/ProjectList';
+import ProjectCreate from './projects/ProjectCreate';
 import { getLoginStatus } from '../actions';
 
 function App({ getLoginStatus }) {
@@ -32,7 +33,15 @@ function App({ getLoginStatus }) {
 							<Route path="/" exact component={Landing} />
 							<Route path="/signup" component={Signup} />
 							<Route path="/signin" component={Signin} />
-							<Route path="/projects" component={ProjectList} />
+							<Route
+								path="/projects"
+								component={ProjectList}
+								exact
+							/>
+							<Route
+								path="/projects/create"
+								component={ProjectCreate}
+							/>
 						</Switch>
 					</div>
 				</div>

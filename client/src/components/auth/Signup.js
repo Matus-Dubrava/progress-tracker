@@ -3,14 +3,14 @@ import { Formik } from 'formik';
 
 import './Signup.css';
 import { connect } from 'react-redux';
-import { signUp, clearAuthFormMessage } from '../../actions';
+import { signUp, clearFormMessages } from '../../actions';
 
-const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
+const Signup = ({ signUp, responseErrorMessages, clearFormMessages }) => {
 	// clear authentication error messages when component is unmounted
 	// these should not persist when user navigates away
 	useEffect(
 		() => () => {
-			clearAuthFormMessage();
+			clearFormMessages();
 		},
 		[]
 	);
@@ -168,10 +168,8 @@ const Signup = ({ signUp, responseErrorMessages, clearAuthFormMessage }) => {
 
 const mapStateToProps = (state) => {
 	return {
-		responseErrorMessages: state.authForm,
+		responseErrorMessages: state.form,
 	};
 };
 
-export default connect(mapStateToProps, { signUp, clearAuthFormMessage })(
-	Signup
-);
+export default connect(mapStateToProps, { signUp, clearFormMessages })(Signup);
