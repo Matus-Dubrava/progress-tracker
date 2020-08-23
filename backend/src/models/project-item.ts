@@ -32,7 +32,7 @@ export interface ProjectItemDocument extends mongoose.Document {
 
 const projectItemSchema = new mongoose.Schema({
 	projectId: { type: Schema.Types.ObjectId },
-	title: { type: String, required: true, unique: true },
+	title: { type: String, required: true },
 	description: { type: String, required: true },
 	dateCreated: { type: Date, default: Date.now, required: true },
 	dateUpdated: { type: Date, default: Date.now, required: true },
