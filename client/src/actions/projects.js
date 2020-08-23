@@ -3,6 +3,7 @@ import backendServer from '../apis/backedServer';
 import history from '../history';
 import {
 	FETCH_PROJECTS,
+	FETCH_PROJECTS_SUMMARY,
 	FETCH_PROJECT,
 	CREATE_PROJECT,
 	SET_FORM_MESSAGE,
@@ -98,6 +99,18 @@ export const updateProject = ({ id, description, isFinished }) => async (
 		});
 		dispatch({
 			type: UPDATE_PROJECT,
+			payload: response.data,
+		});
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+export const fetchProjectsSummary = () => async (dispatch) => {
+	try {
+		const response = await backendServer.get('/projects/summary');
+		dispatch({
+			type: FETCH_PROJECTS_SUMMARY,
 			payload: response.data,
 		});
 	} catch (err) {
