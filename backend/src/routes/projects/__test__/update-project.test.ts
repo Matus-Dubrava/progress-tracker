@@ -110,6 +110,7 @@ it('should remove dateFinished (set to undefined) if isFinished attribute is cha
 		.expect(200);
 
 	expect(response.body.dateFinished).toBeFalsy();
+	expect(response.body.isFinished).toBeFalsy();
 });
 
 it('should fail with 422 if someone tryies to change name of the project', async () => {

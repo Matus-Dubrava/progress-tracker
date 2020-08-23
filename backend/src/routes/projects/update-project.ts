@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
-import moment from 'moment';
+import moment, { isDuration } from 'moment';
 
 import { currentUser } from '../../middleware/current-user';
 import { requireAuth } from '../../middleware/require-auth';
@@ -39,17 +39,28 @@ router.post(
 			throw new ForbiddenResourceError();
 		}
 
+		let dateFinished;
+		if (isFinished === undefined) {
+			dateFinished = project.dateFinished;
+		} else if (isFinished) {
+			dateFinished = new Date(moment().format());
+		} else {
+			dateFinished = undefined;
+		}
+
 		// not using omit true because we may want to set dateFinished to undefined
 		// when isFinished is set to false
 		const updatedProject = await Project.findByIdAndUpdate(
 			id,
 			{
-				description: description ? description : project.description,
-				isFinished: isFinished ? isFinished : project.isFinished,
+				description:
+					description !== undefined
+						? description
+						: project.description,
+				isFinished:
+					isFinished !== undefined ? isFinished : project.isFinished,
 				dateUpdated: new Date(moment().format()),
-				dateFinished: isFinished
-					? new Date(moment().format())
-					: undefined,
+				dateFinished,
 			},
 			{
 				// omitUndefined: true,
