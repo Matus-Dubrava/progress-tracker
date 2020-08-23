@@ -38,7 +38,6 @@ beforeEach(async () => {
 });
 it('should return project successfully', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -56,7 +55,6 @@ it('should return project successfully', async () => {
 
 it('should fail with 403 forbidden when no cookie is present', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -69,7 +67,6 @@ it('should fail with 403 forbidden when no cookie is present', async () => {
 
 it('should fail with 403 if user requesting a project is not its owner', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);

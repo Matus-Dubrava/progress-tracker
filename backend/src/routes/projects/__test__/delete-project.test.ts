@@ -39,7 +39,6 @@ beforeEach(async () => {
 
 it('should delete project successfully and return 204', async () => {
 	const response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -58,7 +57,6 @@ it('should delete project successfully and return 204', async () => {
 
 it('should return 403 if valid cookie is not present', async () => {
 	const response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -80,7 +78,6 @@ it("should return 404 if specified project doesn't exist", async () => {
 
 it('should return 403 if user tries to delete project that it is not the owner of', async () => {
 	const response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);

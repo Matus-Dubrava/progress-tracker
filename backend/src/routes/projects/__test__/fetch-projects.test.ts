@@ -6,8 +6,6 @@ import { config as projectConfig } from './config';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 import { createProject } from './helpers';
 
-let userAId: string;
-let userBId: string;
 let cookieUserA: string;
 let cookieUserB: string;
 
@@ -21,7 +19,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userAId = response.body.id;
 	cookieUserA = parseCookieFromResponse(response);
 
 	response = await request(app)
@@ -33,14 +30,13 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userBId = response.body.id;
 	cookieUserB = parseCookieFromResponse(response);
 });
 
 it('should return all projects that belong to the user that is requesting them', async () => {
-	await createProject(userAId, cookieUserA, projectConfig.testProjectName1);
-	await createProject(userAId, cookieUserA, projectConfig.testProjectName2);
-	await createProject(userBId, cookieUserB, projectConfig.testProjectName3);
+	await createProject(cookieUserA, projectConfig.testProjectName1);
+	await createProject(cookieUserA, projectConfig.testProjectName2);
+	await createProject(cookieUserB, projectConfig.testProjectName3);
 
 	// test user A
 	let response = await request(app)
@@ -67,7 +63,7 @@ it('should return 403 forbidden if user is not signed in', async () => {
 });
 
 it('should return empty list if user does not have any projects', async () => {
-	await createProject(userAId, cookieUserA, projectConfig.testProjectName1);
+	await createProject(cookieUserA, projectConfig.testProjectName1);
 
 	const response = await request(app)
 		.get(projectConfig.baseProjectUrl)

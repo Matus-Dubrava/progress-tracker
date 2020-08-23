@@ -7,8 +7,6 @@ import { config as projectConfig } from './config';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 import { createProject } from './helpers';
 
-let userAId: string;
-let userBId: string;
 let cookieUserA: string;
 let cookieUserB: string;
 
@@ -22,7 +20,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userAId = response.body.id;
 	cookieUserA = parseCookieFromResponse(response);
 
 	response = await request(app)
@@ -34,13 +31,11 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userBId = response.body.id;
 	cookieUserB = parseCookieFromResponse(response);
 });
 
 it('should update project description, isFinished status, and dates correctly', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -66,7 +61,6 @@ it('should update project description, isFinished status, and dates correctly', 
 
 it('should correctly set date finished when isFinished attribute is set to true', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -87,7 +81,6 @@ it('should correctly set date finished when isFinished attribute is set to true'
 
 it('should remove dateFinished (set to undefined) if isFinished attribute is changed to false', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -115,7 +108,6 @@ it('should remove dateFinished (set to undefined) if isFinished attribute is cha
 
 it('should fail with 422 if someone tryies to change name of the project', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -132,7 +124,6 @@ it('should fail with 422 if someone tryies to change name of the project', async
 
 it('should be able to update each attribute [description, isFinished] separately, leaving the rest unchanged', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -167,7 +158,6 @@ it('should be able to update each attribute [description, isFinished] separately
 
 it('should fail with 403 forbidden when no cookie is present', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
@@ -180,7 +170,6 @@ it('should fail with 403 forbidden when no cookie is present', async () => {
 
 it('should fail with 403 if user updating a project is not its owner', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);

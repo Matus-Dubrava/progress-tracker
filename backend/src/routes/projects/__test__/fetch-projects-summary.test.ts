@@ -6,8 +6,6 @@ import { config as projectConfig } from './config';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 import { createProject } from './helpers';
 
-let userAId: string;
-let userBId: string;
 let cookieUserA: string;
 let cookieUserB: string;
 
@@ -21,7 +19,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userAId = response.body.id;
 	cookieUserA = parseCookieFromResponse(response);
 
 	response = await request(app)
@@ -33,18 +30,16 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userBId = response.body.id;
 	cookieUserB = parseCookieFromResponse(response);
 });
 
 it('should return correct number of total, active and closed projects that belong to a logged in user', async () => {
 	let response = await createProject(
-		userAId,
 		cookieUserA,
 		projectConfig.testProjectName1
 	);
-	await createProject(userAId, cookieUserA, projectConfig.testProjectName2);
-	await createProject(userBId, cookieUserB, projectConfig.testProjectName3);
+	await createProject(cookieUserA, projectConfig.testProjectName2);
+	await createProject(cookieUserB, projectConfig.testProjectName3);
 
 	await request(app)
 		.post(`${projectConfig.baseProjectUrl}/${response.body.id}`)
