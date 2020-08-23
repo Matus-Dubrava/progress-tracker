@@ -7,9 +7,12 @@ import './App.css';
 import history from '../history';
 import SideNavigation from './SideNavigation';
 import TopNavigation from './TopNavigation';
-import Landing from './Landing';
 import Signup from './auth/Signup';
 import Signin from './auth/Signin';
+import ProjectList from './projects/ProjectList';
+import ProjectCreate from './projects/ProjectCreate';
+import ProjectDetail from './projects/ProjectDetail';
+import ProjectsDashboard from './projects/ProjectsDashboard';
 import { getLoginStatus } from '../actions';
 
 function App({ getLoginStatus }) {
@@ -28,9 +31,26 @@ function App({ getLoginStatus }) {
 					<TopNavigation />
 					<div className="container app-container">
 						<Switch>
-							<Route path="/" exact component={Landing} />
+							<Route
+								path="/"
+								exact
+								component={ProjectsDashboard}
+							/>
 							<Route path="/signup" component={Signup} />
 							<Route path="/signin" component={Signin} />
+							<Route
+								path="/projects"
+								component={ProjectList}
+								exact
+							/>
+							<Route
+								path="/projects/create"
+								component={ProjectCreate}
+							/>
+							<Route
+								path="/projects/:id"
+								component={ProjectDetail}
+							/>
 						</Switch>
 					</div>
 				</div>

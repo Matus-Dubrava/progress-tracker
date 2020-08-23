@@ -1,0 +1,27 @@
+.projects-dashboard {
+	display: flex;
+}
+
+.projects-dashboard-card {
+	width: 10rem;
+	height: 10rem;
+	margin: 1rem;
+	border: 1px solid #ddd;
+}
+
+.projects-dashboard-card-header {
+	color: white;
+	background-color: rgb(83, 55, 95);
+	height: 3rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.projects-dashboard-card-content {
+	height: 7rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 4rem;
+}

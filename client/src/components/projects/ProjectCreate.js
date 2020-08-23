@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import { Formik } from 'formik';
 
-import './Signup.css';
 import { connect } from 'react-redux';
-import { signIn, clearFormMessages } from '../../actions';
+import { clearFormMessages, createProject } from '../../actions';
 
-const Signin = ({ signIn, responseErrorMessages, clearFormMessages }) => {
+const ProjectCreate = ({
+	responseErrorMessages,
+	clearFormMessages,
+	createProject,
+}) => {
 	// clear authentication error messages when component is unmounted
 	// these should not persist when user navigates away
 	useEffect(
@@ -29,29 +32,26 @@ const Signin = ({ signIn, responseErrorMessages, clearFormMessages }) => {
 		<div>
 			<Formik
 				initialValues={{
-					email: '',
-					password: '',
+					name: '',
+					description: '',
 				}}
 				validate={(values) => {
 					const errors = {};
-					if (!values.email) {
-						errors.email = 'Required';
-					} else if (
-						!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-							values.email
-						)
-					) {
-						errors.email = 'Invalid email address';
+					if (!values.name) {
+						errors.name = 'Required';
 					}
-
-					if (!values.password) {
-						errors.password = 'Required';
+					if (!values.description) {
+						errors.description = 'Required';
 					}
 
 					return errors;
 				}}
 				onSubmit={(values, { setSubmitting }) => {
-					signIn({ email: values.email, password: values.password });
+					console.log('submitting...');
+					createProject({
+						name: values.name,
+						description: values.description,
+					});
 					setSubmitting(false);
 				}}
 			>
@@ -64,7 +64,7 @@ const Signin = ({ signIn, responseErrorMessages, clearFormMessages }) => {
 					handleSubmit,
 				}) => (
 					<form className="form" onSubmit={handleSubmit}>
-						<h3>Sign In</h3>
+						<h3>Create Project</h3>
 
 						{responseErrorMessages && (
 							<ul className="form-errors-list">
@@ -73,32 +73,32 @@ const Signin = ({ signIn, responseErrorMessages, clearFormMessages }) => {
 						)}
 
 						<div className="form-group">
-							<label>email</label>
+							<label>name</label>
 							<input
-								type="email"
-								name="email"
+								type="text"
+								name="name"
 								className="form-control"
-								value={values.email}
+								value={values.name}
 								onChange={handleChange}
 							/>
-							{errors.email && touched.email ? (
+							{errors.name && touched.name ? (
 								<small className="field-error">
-									{errors.email}
+									{errors.name}
 								</small>
 							) : null}
 						</div>
 						<div className="form-group">
-							<label>password</label>
+							<label>description</label>
 							<input
-								name="password"
+								name="description"
 								className="form-control"
-								type="password"
-								value={values.password}
+								type="text"
+								value={values.description}
 								onChange={handleChange}
 							/>
-							{errors.password && touched.password ? (
+							{errors.description && touched.description ? (
 								<small className="field-error">
-									{errors.password}
+									{errors.description}
 								</small>
 							) : null}
 						</div>
@@ -107,7 +107,7 @@ const Signin = ({ signIn, responseErrorMessages, clearFormMessages }) => {
 							type="submit"
 							disabled={isSubmitting}
 						>
-							Sign In
+							Create Project
 						</button>
 					</form>
 				)}
@@ -122,4 +122,7 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, { signIn, clearFormMessages })(Signin);
+export default connect(mapStateToProps, {
+	clearFormMessages,
+	createProject,
+})(ProjectCreate);

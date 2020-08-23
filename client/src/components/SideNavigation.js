@@ -17,12 +17,12 @@ const SideNavigation = ({ isSignedIn, name, email, signOut }) => {
 			<ul className="navigation-list">
 				<li className="navigation-item">
 					<Link className="navigation-link" to="/">
-						Home
+						Dashboard
 					</Link>
 				</li>
 				<li className="navigation-item active">
-					<Link className="navigation-link" to="/">
-						Test
+					<Link className="navigation-link" to="/projects">
+						Projects
 					</Link>
 				</li>
 				<li className="navigation-item">

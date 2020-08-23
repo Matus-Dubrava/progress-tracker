@@ -1,9 +1,13 @@
 import { combineReducers } from 'redux';
 
 import authReducer from './auth';
-import authFormReducer from './authForm';
+import formReducer from './form';
+import projectsReducer from './projects';
+import projectsSummaryReducer from './projectsSummary';
 
 export default combineReducers({
 	auth: authReducer,
-	authForm: authFormReducer,
+	form: formReducer,
+	projects: projectsReducer,
+	projectsSummary: projectsSummaryReducer,
 });

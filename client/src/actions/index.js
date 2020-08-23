@@ -1,7 +1,12 @@
+export { getLoginStatus, signIn, signOut, signUp } from './auth';
+
+export { clearFormMessages } from './form';
+
 export {
-	getLoginStatus,
-	signIn,
-	signOut,
-	signUp,
-	clearAuthFormMessage,
-} from './auth';
+	fetchProjects,
+	fetchProject,
+	fetchProjectsSummary,
+	createProject,
+	deleteProject,
+	updateProject,
+} from './projects';
