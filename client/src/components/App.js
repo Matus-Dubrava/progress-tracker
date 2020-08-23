@@ -12,6 +12,7 @@ import Signup from './auth/Signup';
 import Signin from './auth/Signin';
 import ProjectList from './projects/ProjectList';
 import ProjectCreate from './projects/ProjectCreate';
+import ProjectDetail from './projects/ProjectDetail';
 import { getLoginStatus } from '../actions';
 
 function App({ getLoginStatus }) {
@@ -41,6 +42,10 @@ function App({ getLoginStatus }) {
 							<Route
 								path="/projects/create"
 								component={ProjectCreate}
+							/>
+							<Route
+								path="/projects/:id"
+								component={ProjectDetail}
 							/>
 						</Switch>
 					</div>

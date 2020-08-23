@@ -4,6 +4,7 @@ export { clearFormMessages } from './form';
 
 export {
 	fetchProjects,
+	fetchProject,
 	createProject,
 	deleteProject,
 	updateProject,

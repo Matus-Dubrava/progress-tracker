@@ -3,11 +3,25 @@ import backendServer from '../apis/backedServer';
 import history from '../history';
 import {
 	FETCH_PROJECTS,
+	FETCH_PROJECT,
 	CREATE_PROJECT,
 	SET_FORM_MESSAGE,
 	DELETE_PROJECT,
 	UPDATE_PROJECT,
 } from './types';
+
+export const fetchProject = (id) => async (dispatch) => {
+	try {
+		const response = await backendServer.get(`/projects/${id}`);
+
+		dispatch({
+			type: FETCH_PROJECT,
+			payload: response.data,
+		});
+	} catch (err) {
+		console.log(err);
+	}
+};
 
 export const fetchProjects = () => async (dispatch) => {
 	try {
