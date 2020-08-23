@@ -144,7 +144,7 @@ it('should return 422 if category is not one of the allowed values [task, issue]
 		.set('Cookie', cookieUserA)
 		.send({
 			title: projectItemConfig.testTitle,
-			category: 'some',
+			category: projectItemConfig.invalidCategoryType,
 			description: projectItemConfig.testDescription,
 		})
 		.expect(422);

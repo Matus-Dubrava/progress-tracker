@@ -1,12 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { Comment, CommentDocument } from './comment';
+import { CommentDocument } from './comment';
+
+export enum ProjectItemCategory {
+	Issue = 'issue',
+	Task = 'task',
+}
 
 interface ProjectItemAttrs {
 	projectId: string;
 	title: string;
 	description: string;
-	category: string;
+	category: ProjectItemCategory;
 }
 
 interface ProjectItemModel extends mongoose.Model<ProjectItemDocument> {
@@ -21,7 +26,7 @@ export interface ProjectItemDocument extends mongoose.Document {
 	dateUpdated: Date;
 	dateFinished: Date;
 	isFinished: boolean;
-	category: string;
+	category: ProjectItemCategory;
 	comments: CommentDocument[];
 }
 
