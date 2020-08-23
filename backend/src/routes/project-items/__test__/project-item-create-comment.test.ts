@@ -67,7 +67,7 @@ beforeEach(async () => {
 it('should successfully create comment and return properly serialized comment', async () => {
 	const response = await request(app)
 		.post(
-			`/projects/${projectIdUserA}/items/${projectItemIdUserA}/comments`
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
 		)
 		.set('Cookie', cookieUserA)
 		.send({
@@ -88,7 +88,7 @@ it('should successfully create comment and return properly serialized comment', 
 it('should return 422 if required attribute [text] is not specified', async () => {
 	await request(app)
 		.post(
-			`/projects/${projectIdUserA}/items/${projectItemIdUserA}/comments`
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
 		)
 		.set('Cookie', cookieUserA)
 		.send({})
@@ -98,7 +98,7 @@ it('should return 422 if required attribute [text] is not specified', async () =
 it('should return 422 if project with specified ID does not exist', async () => {
 	await request(app)
 		.post(
-			`/projects/${projectConfig.testProjectId}/items/${projectItemIdUserA}/comments`
+			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectId}/items/${projectItemIdUserA}/comments`
 		)
 		.set('Cookie', cookieUserA)
 		.send({
@@ -110,7 +110,7 @@ it('should return 422 if project with specified ID does not exist', async () => 
 it('should return 422 if project ID is not in the valid mongodb ID format', async () => {
 	await request(app)
 		.post(
-			`/projects/${projectConfig.testProjectInvalidId}/items/${projectItemIdUserA}/comments`
+			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectInvalidId}/items/${projectItemIdUserA}/comments`
 		)
 		.set('Cookie', cookieUserA)
 		.send({
@@ -122,7 +122,7 @@ it('should return 422 if project ID is not in the valid mongodb ID format', asyn
 it('should return 422 if project item with specified ID does not exist', async () => {
 	await request(app)
 		.post(
-			`/projects/${projectIdUserA}/items/${projectConfig.testProjectId}/comments`
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectConfig.testProjectId}/comments`
 		)
 		.set('Cookie', cookieUserA)
 		.send({
@@ -134,7 +134,7 @@ it('should return 422 if project item with specified ID does not exist', async (
 it('should return 422 if project item ID is not in the valid mongodb ID format', async () => {
 	await request(app)
 		.post(
-			`/projects/${projectIdUserA}/items/${projectConfig.testProjectInvalidId}/comments`
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectConfig.testProjectInvalidId}/comments`
 		)
 		.set('Cookie', cookieUserA)
 		.send({
@@ -146,7 +146,7 @@ it('should return 422 if project item ID is not in the valid mongodb ID format',
 it('should return 403 if user is not the owner of the project', async () => {
 	await request(app)
 		.post(
-			`/projects/${projectIdUserA}/items/${projectItemIdUserA}/comments`
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
 		)
 		.set('Cookie', cookieUserB)
 		.send({
@@ -158,7 +158,7 @@ it('should return 403 if user is not the owner of the project', async () => {
 it('should return 403 if user is not signed in', async () => {
 	await request(app)
 		.post(
-			`/projects/${projectIdUserA}/items/${projectItemIdUserA}/comments`
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
 		)
 		.send({
 			text: projectItemConfig.commentText,
