@@ -46,8 +46,6 @@ it('should return correct number of total, active and closed projects that belon
 	await createProject(userAId, cookieUserA, projectConfig.testProjectName2);
 	await createProject(userBId, cookieUserB, projectConfig.testProjectName3);
 
-	console.log(response.body);
-
 	await request(app)
 		.post(`${projectConfig.baseProjectUrl}/${response.body.id}`)
 		.set('Cookie', cookieUserA)
