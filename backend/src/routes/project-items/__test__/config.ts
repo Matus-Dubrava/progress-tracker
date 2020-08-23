@@ -6,6 +6,7 @@ const config = {
 	categoryTask: ProjectItemCategory.Task,
 	categoryIssue: ProjectItemCategory.Issue,
 	invalidCategoryType: 'something else',
+	commentText: 'comment text',
 };
 
 export { config };
