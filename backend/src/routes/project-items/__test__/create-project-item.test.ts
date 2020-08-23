@@ -43,9 +43,9 @@ beforeEach(async () => {
 	projectId = response.body.id;
 });
 
-it('should create project successfully and return 201', async () => {
+it('should create project item successfully and return 201, item should be properly serialized', async () => {
 	const response = await request(app)
-		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)
 		.set('Cookie', cookieUserA)
 		.send({
 			title: projectItemConfig.testTitle,
@@ -65,12 +65,16 @@ it('should create project successfully and return 201', async () => {
 	expect(response.body.dateUpdated.split('T')[0]).toEqual(currentDate);
 	expect(response.body.dateFinished).toBeFalsy();
 	expect(response.body.projectId).toEqual(projectId);
-	expect(response.body.id).not.toBeNull();
+	expect(response.body.id).toBeDefined();
+	expect(response.body.comments.length).toEqual(0);
+
+	expect(response.body._id).toBeUndefined();
+	expect(response.body.__v).toBeUndefined();
 });
 
 it('should return 422 if any of the required attributes are missing [title, description, category]', async () => {
 	await request(app)
-		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)
 		.set('Cookie', cookieUserA)
 		.send({
 			category: projectItemConfig.categoryTask,
@@ -79,7 +83,7 @@ it('should return 422 if any of the required attributes are missing [title, desc
 		.expect(422);
 
 	await request(app)
-		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)
 		.set('Cookie', cookieUserA)
 		.send({
 			title: projectItemConfig.testTitle,
@@ -88,7 +92,7 @@ it('should return 422 if any of the required attributes are missing [title, desc
 		.expect(422);
 
 	await request(app)
-		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)
 		.set('Cookie', cookieUserA)
 		.send({
 			title: projectItemConfig.testTitle,
@@ -99,7 +103,9 @@ it('should return 422 if any of the required attributes are missing [title, desc
 
 it('should return 422 if project with the specified ID does not exist', async () => {
 	await request(app)
-		.post(`${projectConfig.baseProjectUrl}/${projectConfig.testProjectId}`)
+		.post(
+			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectId}/items`
+		)
 		.set('Cookie', cookieUserA)
 		.send({
 			title: projectItemConfig.testTitle,
@@ -111,7 +117,7 @@ it('should return 422 if project with the specified ID does not exist', async ()
 
 it('should return 403 if user is not signed in', async () => {
 	await request(app)
-		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)
 		.send({
 			title: projectItemConfig.testTitle,
 			category: projectItemConfig.categoryTask,
@@ -122,7 +128,7 @@ it('should return 403 if user is not signed in', async () => {
 
 it("should return 403 if signed in user's ID doesn't match the project owner's ID", async () => {
 	await request(app)
-		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)
 		.set('Cookie', cookieUserB)
 		.send({
 			title: projectItemConfig.testTitle,
@@ -134,12 +140,32 @@ it("should return 403 if signed in user's ID doesn't match the project owner's I
 
 it('should return 422 if category is not one of the allowed values [task, issue]', async () => {
 	await request(app)
-		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)
 		.set('Cookie', cookieUserA)
 		.send({
 			title: projectItemConfig.testTitle,
 			category: 'some',
 			description: projectItemConfig.testDescription,
 		})
-		.expect(403);
+		.expect(422);
+});
+
+it('should return 422 if project is closed', async () => {
+	await request(app)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
+		.set('Cookie', cookieUserA)
+		.send({
+			isFinished: true,
+		})
+		.expect(200);
+
+	await request(app)
+		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)
+		.set('Cookie', cookieUserA)
+		.send({
+			title: projectItemConfig.testTitle,
+			category: projectItemConfig.categoryTask,
+			description: projectItemConfig.testDescription,
+		})
+		.expect(422);
 });

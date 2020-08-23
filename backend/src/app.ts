@@ -18,6 +18,8 @@ import { deleteProjectRouter } from './routes/projects/delete-project';
 import { updateProjectRouter } from './routes/projects/update-project';
 import { fetchProjectsSummaryRouter } from './routes/projects/fetch-projects-summary';
 
+import { createProjectItemRouter } from './routes/project-items/create-project-item';
+
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
 
@@ -69,6 +71,9 @@ app.use(authBaseUrlPath, signinRouter);
 app.use(authBaseUrlPath, currentUserRouter);
 app.use(authBaseUrlPath, signoutRouter);
 app.use(authBaseUrlPath, deleteUserRouter);
+
+// project item routes
+app.use(projectBaseUrlPath, createProjectItemRouter);
 
 // project routes
 app.use(projectBaseUrlPath, fetchProjectsSummaryRouter);
