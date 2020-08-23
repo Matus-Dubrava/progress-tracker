@@ -64,7 +64,7 @@ beforeEach(async () => {
 	projectItemIdUserB = response.body.id;
 });
 
-it('should successfully create comment and return properly serialized comment', async () => {
+it('should successfully create comment and return project item containing properly serialized comment', async () => {
 	const response = await request(app)
 		.post(
 			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
@@ -73,16 +73,18 @@ it('should successfully create comment and return properly serialized comment', 
 		.send({
 			text: projectItemConfig.commentText,
 		})
-		.expect(201);
+		.expect(200);
 
-	expect(response.body.text).toEqual(projectItemConfig.commentText);
-	expect(response.body.dateCreated.split('T')[0]).toEqual(
+	expect(response.body.comments.length).toEqual(1);
+	expect(response.body.comments[0].text).toEqual(
+		projectItemConfig.commentText
+	);
+	expect(response.body.comments[0].dateCreated.split('T')[0]).toEqual(
 		moment().format().split('T')[0]
 	);
-
-	expect(response.body.id).toBeDefined();
-	expect(response.body._id).toBeUndefined();
-	expect(response.body.__v).toBeUndefined();
+	expect(response.body.comments[0].id).toBeDefined();
+	expect(response.body.comments[0]._id).toBeUndefined();
+	expect(response.body.comments[0].__v).toBeUndefined();
 });
 
 it('should return 422 if required attribute [text] is not specified', async () => {
@@ -92,6 +94,18 @@ it('should return 422 if required attribute [text] is not specified', async () =
 		)
 		.set('Cookie', cookieUserA)
 		.send({})
+		.expect(422);
+});
+
+it('should return 422 if required attribute [text] is not at least 15 characters long', async () => {
+	await request(app)
+		.post(
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
+		)
+		.set('Cookie', cookieUserA)
+		.send({
+			text: projectItemConfig.invalidCommentText,
+		})
 		.expect(422);
 });
 

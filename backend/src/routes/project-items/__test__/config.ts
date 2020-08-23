@@ -6,7 +6,8 @@ const config = {
 	categoryTask: ProjectItemCategory.Task,
 	categoryIssue: ProjectItemCategory.Issue,
 	invalidCategoryType: 'something else',
-	commentText: 'comment text',
+	commentText: 'comment text which is at least 15 characters long',
+	invalidCommentText: 'too short',
 };
 
 export { config };

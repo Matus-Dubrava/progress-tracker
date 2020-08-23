@@ -1,5 +1,6 @@
 import { ProjectItemDocument } from '../models/project-item';
 import { CommentDocument } from '../models/comment';
+import { serializeComment, SerializedComment } from './serialize-comment';
 
 interface SerializedProjectItem {
 	projectId: string;
@@ -11,7 +12,7 @@ interface SerializedProjectItem {
 	dateUpdated: Date;
 	dateFinished?: Date;
 	category: string;
-	comments: CommentDocument[];
+	comments: SerializedComment[];
 }
 
 export const serializeProjectItem = (
@@ -27,6 +28,6 @@ export const serializeProjectItem = (
 		dateUpdated: projectItem.dateUpdated,
 		dateFinished: projectItem.dateFinished,
 		category: projectItem.category,
-		comments: projectItem.comments,
+		comments: projectItem.comments.map(serializeComment),
 	};
 };
