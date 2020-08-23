@@ -11,17 +11,17 @@ import { Project } from '../../models/project';
 const router = Router();
 
 router.delete(
-	'/projects/:id',
+	'/projects/:projectId',
 	currentUser,
 	requireAuth,
 	validateMongoId,
 	async (req: Request, res: Response) => {
-		const { id } = req.params;
+		const { projectId } = req.params;
 
-		const project = await Project.findById(id);
+		const project = await Project.findById(projectId);
 
 		if (!project) {
-			throw new NotFoundError(`Project with ${id} does not exist`);
+			throw new NotFoundError(`Project with ${projectId} does not exist`);
 		}
 
 		// users can access only their own projects
@@ -29,7 +29,7 @@ router.delete(
 			throw new ForbiddenResourceError();
 		}
 
-		await Project.findByIdAndDelete(id);
+		await Project.findByIdAndDelete(projectId);
 
 		return res.sendStatus(204);
 	}

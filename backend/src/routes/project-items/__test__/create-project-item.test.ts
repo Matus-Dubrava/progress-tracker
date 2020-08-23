@@ -115,6 +115,20 @@ it('should return 422 if project with the specified ID does not exist', async ()
 		.expect(422);
 });
 
+it('should return 422 if project ID is not in the valid mongodb ID format', async () => {
+	await request(app)
+		.post(
+			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectInvalidId}/items`
+		)
+		.set('Cookie', cookieUserA)
+		.send({
+			title: projectItemConfig.testTitle,
+			category: projectItemConfig.categoryTask,
+			description: projectItemConfig.testDescription,
+		})
+		.expect(422);
+});
+
 it('should return 403 if user is not signed in', async () => {
 	await request(app)
 		.post(`${projectConfig.baseProjectUrl}/${projectId}/items`)

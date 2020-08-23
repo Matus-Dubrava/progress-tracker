@@ -219,3 +219,12 @@ it('should return 404 if project with specified ID does not exist', async () => 
 		.set('Cookie', cookieUserA)
 		.expect(404);
 });
+
+it('should return 422 if project ID is not in the valid mongodb ID format', async () => {
+	await request(app)
+		.get(
+			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectInvalidId}/items`
+		)
+		.set('Cookie', cookieUserA)
+		.expect(422);
+});

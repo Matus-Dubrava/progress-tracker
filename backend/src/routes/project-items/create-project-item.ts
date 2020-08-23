@@ -4,6 +4,7 @@ import { body } from 'express-validator';
 import { currentUser } from '../../middleware/current-user';
 import { requireAuth } from '../../middleware/require-auth';
 import { validateRequest } from '../../middleware/validate-request';
+import { validateMongoId } from '../../middleware/validate-mongo-id';
 import { validateCategoryValue } from '../../services/validate-category-value';
 import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
 import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
@@ -27,6 +28,7 @@ router.post(
 			.withMessage('allowed category values: task, issue'),
 	],
 	validateRequest,
+	validateMongoId,
 	async (req: Request, res: Response) => {
 		const { projectId } = req.params;
 		const { category, title, description } = req.body;

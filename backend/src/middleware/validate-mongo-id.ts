@@ -7,9 +7,9 @@ export const validateMongoId = (
 	res: Response,
 	next: NextFunction
 ) => {
-	const { id } = req.params;
+	const { projectId } = req.params;
 
-	if (id.length !== 24) {
+	if (projectId.length !== 24) {
 		throw new CustomRequestValidationError(
 			'incorrect project ID format, expected 24 characters long hex string'
 		);

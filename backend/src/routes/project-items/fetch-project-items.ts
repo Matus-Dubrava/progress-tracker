@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 
 import { requireAuth } from '../../middleware/require-auth';
 import { currentUser } from '../../middleware/current-user';
+import { validateMongoId } from '../../middleware/validate-mongo-id';
 import {
 	ProjectItem,
 	ProjectItemCategory,
@@ -18,6 +19,7 @@ router.get(
 	`/projects/:projectId/items`,
 	currentUser,
 	requireAuth,
+	validateMongoId,
 	async (req: Request, res: Response) => {
 		const { projectId } = req.params;
 		const { category } = req.query;

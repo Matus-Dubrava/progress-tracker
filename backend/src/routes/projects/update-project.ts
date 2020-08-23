@@ -15,7 +15,7 @@ import { serializeProject } from '../../services/serialize-project';
 const router = Router();
 
 router.post(
-	'/projects/:id',
+	'/projects/:projectId',
 	currentUser,
 	requireAuth,
 	validateMongoId,
@@ -26,13 +26,13 @@ router.post(
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
-		const { id } = req.params;
+		const { projectId } = req.params;
 		const { description, isFinished } = req.body;
 
-		const project = await Project.findById(id);
+		const project = await Project.findById(projectId);
 
 		if (!project) {
-			throw new NotFoundError(`Project with ${id} does not exist`);
+			throw new NotFoundError(`Project with ${projectId} does not exist`);
 		}
 
 		if (project.ownerId.toString() !== req.currentUser!.id) {
@@ -51,7 +51,7 @@ router.post(
 		// not using omit true because we may want to set dateFinished to undefined
 		// when isFinished is set to false
 		const updatedProject = await Project.findByIdAndUpdate(
-			id,
+			projectId,
 			{
 				description:
 					description !== undefined
