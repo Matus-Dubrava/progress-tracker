@@ -6,11 +6,9 @@ import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from '../../projects/__test__/config';
 import { config as projectItemConfig } from './config';
 import { createProject } from '../../projects/__test__/helpers';
-import { createProjectItem } from './helpers';
+import { createProjectItem, fetchProjectItems } from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
-let userAId: string;
-let userBId: string;
 let cookieUserA: string;
 let cookieUserB: string;
 let projectIdUserA: string;
@@ -26,7 +24,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userAId = response.body.id;
 	cookieUserA = parseCookieFromResponse(response);
 
 	response = await request(app)
@@ -38,7 +35,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userBId = response.body.id;
 	cookieUserB = parseCookieFromResponse(response);
 
 	response = await createProject(cookieUserA, projectConfig.testProjectName1);
@@ -52,26 +48,33 @@ it('should return all project items if no query string param is set', async () =
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryIssue,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryIssue,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryTask,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 
-	const response = await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectIdUserA}/items`)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	const response = await fetchProjectItems({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		expect: 200,
+	});
 
 	expect(response.body.length).toEqual(3);
 });
@@ -80,14 +83,17 @@ it('should return properly serialized project items', async () => {
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryTask,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 
-	let response = await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectIdUserA}/items`)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	const response = await fetchProjectItems({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		expect: 200,
+	});
 
 	const currentDate = moment().format().split('T')[0];
 
@@ -111,35 +117,43 @@ it("should not return items that belong to user with different ID than the proje
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryIssue,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryIssue,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 	await createProjectItem({
 		cookie: cookieUserB,
 		category: projectItemConfig.categoryTask,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserB,
 		expect: 201,
 	});
 
-	let response = await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectIdUserA}/items`)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	let response = await fetchProjectItems({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		expect: 200,
+	});
 
 	expect(response.body.length).toEqual(2);
 	expect(response.body[0].category).toEqual(projectItemConfig.categoryIssue);
 	expect(response.body[1].category).toEqual(projectItemConfig.categoryIssue);
 
-	response = await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectIdUserB}/items`)
-		.set('Cookie', cookieUserB)
-		.expect(200);
+	response = await fetchProjectItems({
+		cookie: cookieUserB,
+		projectId: projectIdUserB,
+		expect: 200,
+	});
 
 	expect(response.body.length).toEqual(1);
 	expect(response.body[0].category).toEqual(projectItemConfig.categoryTask);
@@ -149,28 +163,34 @@ it('should return all project items that are tasks if query string param type is
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryIssue,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryIssue,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryTask,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 
-	const response = await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items?category=${projectItemConfig.categoryTask}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	const response = await fetchProjectItems({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		category: projectItemConfig.categoryTask,
+		expect: 200,
+	});
 
 	expect(response.body.length).toEqual(1);
 	expect(response.body[0].category).toEqual(projectItemConfig.categoryTask);
@@ -180,64 +200,70 @@ it('should return all project items that are issues if query string param type i
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryIssue,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryIssue,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 	await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryTask,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
 
-	const response = await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items?category=${projectItemConfig.categoryIssue}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	const response = await fetchProjectItems({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		category: projectItemConfig.categoryIssue,
+		expect: 200,
+	});
 
 	expect(response.body.length).toEqual(2);
 	expect(response.body[0].category).toEqual(projectItemConfig.categoryIssue);
 });
 
 it('should return 422 if query string param type is set to something else than task or issue', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items?category=${projectItemConfig.invalidCategoryType}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(422);
+	await fetchProjectItems({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		category: projectItemConfig.invalidCategoryType,
+		expect: 422,
+	});
 });
 
 it('should return 403 if user is not signed in', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items?category=${projectItemConfig.categoryIssue}`
-		)
-		.expect(403);
+	await fetchProjectItems({
+		projectId: projectIdUserA,
+		category: projectItemConfig.categoryIssue,
+		expect: 403,
+	});
 });
 
 it('should return 404 if project with specified ID does not exist', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectId}/items?category=${projectItemConfig.categoryIssue}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(404);
+	await fetchProjectItems({
+		cookie: cookieUserA,
+		projectId: projectConfig.testProjectId,
+		category: projectItemConfig.categoryIssue,
+		expect: 404,
+	});
 });
 
 it('should return 422 if project ID is not in the valid mongodb ID format', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectInvalidId}/items`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(422);
+	await fetchProjectItems({
+		cookie: cookieUserA,
+		projectId: projectConfig.testProjectInvalidId,
+		category: projectItemConfig.categoryIssue,
+		expect: 422,
+	});
 });

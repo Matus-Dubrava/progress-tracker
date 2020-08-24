@@ -9,7 +9,6 @@ import { createProject } from '../../projects/__test__/helpers';
 import { createProjectItem, createProjectItemComment } from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
-let userBId: string;
 let cookieUserA: string;
 let cookieUserB: string;
 let projectIdUserA: string;
@@ -37,7 +36,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userBId = response.body.id;
 	cookieUserB = parseCookieFromResponse(response);
 
 	response = await createProject(cookieUserA, projectConfig.testProjectName1);
@@ -49,6 +47,8 @@ beforeEach(async () => {
 	response = await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryTask,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
@@ -77,94 +77,79 @@ it('should successfully create comment and return project item containing proper
 });
 
 it('should return 422 if required attribute [text] is not specified', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({})
-		.expect(422);
+	await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		expect: 422,
+	});
 });
 
 it('should return 422 if required attribute [text] is not at least 15 characters long', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.invalidCommentText,
-		})
-		.expect(422);
+	await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.invalidCommentText,
+		expect: 422,
+	});
 });
 
 it('should return 422 if project with specified ID does not exist', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectId}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText1,
-		})
-		.expect(422);
+	await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectConfig.testProjectId,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 422,
+	});
 });
 
 it('should return 422 if project ID is not in the valid mongodb ID format', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectInvalidId}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText1,
-		})
-		.expect(422);
+	await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectConfig.testProjectInvalidId,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 422,
+	});
 });
 
 it('should return 422 if project item with specified ID does not exist', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectConfig.testProjectId}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText1,
-		})
-		.expect(422);
+	await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectConfig.testProjectId,
+		text: projectItemConfig.commentText1,
+		expect: 422,
+	});
 });
 
 it('should return 422 if project item ID is not in the valid mongodb ID format', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectConfig.testProjectInvalidId}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText1,
-		})
-		.expect(422);
+	await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectConfig.testProjectInvalidId,
+		text: projectItemConfig.commentText1,
+		expect: 422,
+	});
 });
 
 it('should return 403 if user is not the owner of the project', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserB)
-		.send({
-			text: projectItemConfig.commentText1,
-		})
-		.expect(403);
+	await createProjectItemComment({
+		cookie: cookieUserB,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 403,
+	});
 });
 
 it('should return 403 if user is not signed in', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.send({
-			text: projectItemConfig.commentText1,
-		})
-		.expect(403);
+	await createProjectItemComment({
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 403,
+	});
 });

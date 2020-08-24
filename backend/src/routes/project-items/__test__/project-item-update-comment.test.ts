@@ -48,6 +48,8 @@ beforeEach(async () => {
 	response = await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryTask,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});

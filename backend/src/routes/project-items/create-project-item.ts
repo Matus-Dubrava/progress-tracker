@@ -49,7 +49,7 @@ router.post(
 
 		// can't create items in closed project
 		if (project.isFinished) {
-			throw new CustomRequestValidationError('This project is closed');
+			throw new ForbiddenResourceError();
 		}
 
 		const projectItem = await ProjectItem.build({

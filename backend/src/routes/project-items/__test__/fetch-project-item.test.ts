@@ -6,7 +6,11 @@ import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from '../../projects/__test__/config';
 import { config as projectItemConfig } from './config';
 import { createProject } from '../../projects/__test__/helpers';
-import { createProjectItem, createProjectItemComment } from './helpers';
+import {
+	createProjectItem,
+	createProjectItemComment,
+	fetchProjectItem,
+} from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
 let cookieUserA: string;
@@ -47,6 +51,8 @@ beforeEach(async () => {
 	response = await createProjectItem({
 		cookie: cookieUserA,
 		category: projectItemConfig.categoryTask,
+		title: projectItemConfig.testTitle,
+		description: projectItemConfig.testDescription,
 		projectId: projectIdUserA,
 		expect: 201,
 	});
@@ -70,12 +76,12 @@ it('should return corretly serialized project item', async () => {
 		expect: 200,
 	});
 
-	const response = await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	const response = await fetchProjectItem({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		expect: 200,
+	});
 
 	expect(response.body.id).toEqual(projectItemIdUserA);
 	expect(response.body._id).toBeUndefined();
@@ -108,54 +114,54 @@ it('should return corretly serialized project item', async () => {
 });
 
 it('should return 422 if project with given ID does not exist', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectId}/items/${projectItemIdUserA}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(422);
+	await fetchProjectItem({
+		cookie: cookieUserA,
+		projectId: projectConfig.testProjectId,
+		itemId: projectItemIdUserA,
+		expect: 422,
+	});
 });
 
 it('should return 422 if project ID is not in valid mongodb ID format', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectConfig.testProjectInvalidId}/items/${projectItemIdUserA}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(422);
+	await fetchProjectItem({
+		cookie: cookieUserA,
+		projectId: projectConfig.testProjectInvalidId,
+		itemId: projectItemIdUserA,
+		expect: 422,
+	});
 });
 
 it('should return 422 if project item with given ID does not exist', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectConfig.testProjectId}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(422);
+	await fetchProjectItem({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectConfig.testProjectId,
+		expect: 422,
+	});
 });
 
 it('should return 422 if project item ID is not valid mongodb ID format', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectConfig.testProjectInvalidId}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(422);
+	await fetchProjectItem({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectConfig.testProjectInvalidId,
+		expect: 422,
+	});
 });
 
 it('should return 403 if user is not signed in', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}`
-		)
-		.expect(403);
+	await fetchProjectItem({
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		expect: 403,
+	});
 });
 
 it('should return 403 if user is not the owner of the project', async () => {
-	await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}`
-		)
-		.set('Cookie', cookieUserB)
-		.expect(403);
+	await fetchProjectItem({
+		cookie: cookieUserB,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		expect: 403,
+	});
 });

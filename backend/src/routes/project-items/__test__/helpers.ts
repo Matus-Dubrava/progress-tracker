@@ -10,11 +10,11 @@ export const createProjectItem = async ({
 	category,
 	projectId,
 	expect,
-	title = projectItemConfig.testTitle,
-	description = projectItemConfig.testDescription,
+	title,
+	description,
 }: {
 	cookie?: string;
-	category?: ProjectItemCategory;
+	category?: string; // don't set it to Category Enum otherwise it is not possible to test what happens when invalid value is passed in
 	projectId: string;
 	expect: number;
 	title?: string;
@@ -136,6 +136,31 @@ export const fetchProjectItem = async ({
 		return await request(app)
 			.get(`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}`)
 			.expect(expect);
+	}
+};
+
+export const fetchProjectItems = async ({
+	cookie,
+	projectId,
+	expect,
+	category,
+}: {
+	cookie?: string;
+	projectId: string;
+	expect: number;
+	category?: string; // don't set it to Category Enum otherwise it is not possible to test what happens when invalid value is passed in
+}): Promise<request.Response> => {
+	let url: string;
+	if (category) {
+		url = `${projectConfig.baseProjectUrl}/${projectId}/items?category=${category}`;
+	} else {
+		url = `${projectConfig.baseProjectUrl}/${projectId}/items`;
+	}
+
+	if (cookie) {
+		return await request(app).get(url).set('Cookie', cookie).expect(expect);
+	} else {
+		return await request(app).get(url).expect(expect);
 	}
 };
 
