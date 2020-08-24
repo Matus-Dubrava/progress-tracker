@@ -1,18 +1,16 @@
 import request from 'supertest';
-import moment from 'moment';
 
 import { app } from '../../../app';
 import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from '../../projects/__test__/config';
 import { config as projectItemConfig } from './config';
 import { createProject } from '../../projects/__test__/helpers';
-import { createProjectItem } from './helpers';
+import { createProjectItem, createProjectItemComment } from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
 let cookieUserA: string;
 let cookieUserB: string;
 let projectIdUserA: string;
-let projectIdUserB: string;
 let projectItemIdUserA: string;
 
 beforeEach(async () => {
@@ -41,9 +39,6 @@ beforeEach(async () => {
 	response = await createProject(cookieUserA, projectConfig.testProjectName1);
 	projectIdUserA = response.body.id;
 
-	response = await createProject(cookieUserB, projectConfig.testProjectName2);
-	projectIdUserB = response.body.id;
-
 	response = await createProjectItem(
 		cookieUserA,
 		projectItemConfig.categoryTask,
@@ -53,27 +48,21 @@ beforeEach(async () => {
 });
 
 it('should delete comment successfully and return 204', async () => {
-	let response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText,
-		})
-		.expect(200);
+	let response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
 
 	const comment1Id = response.body.comments[0].id;
 
-	response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: `${projectItemConfig.commentText}1`,
-		})
-		.expect(200);
+	response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText2
+	);
 
 	const comment2Id = response.body.comments[1].id;
 
@@ -93,7 +82,7 @@ it('should delete comment successfully and return 204', async () => {
 
 	expect(response.body.comments.length).toEqual(1);
 	expect(response.body.comments[0].text).toEqual(
-		`${projectItemConfig.commentText}1`
+		projectItemConfig.commentText2
 	);
 
 	await request(app)
@@ -132,17 +121,13 @@ it('should return 422 if comment ID is not in a valid mongodb format', async () 
 });
 
 it('should return 422 if project item with given ID does not exist', async () => {
-	let response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText,
-		})
-		.expect(200);
-
-	const comment1Id = response.body.id;
+	let response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
+	const comment1Id = response.body.comments[0].id;
 
 	await request(app)
 		.delete(
@@ -153,17 +138,13 @@ it('should return 422 if project item with given ID does not exist', async () =>
 });
 
 it('should return 422 if project item ID is not in a valid mongodb format', async () => {
-	let response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText,
-		})
-		.expect(200);
-
-	const comment1Id = response.body.id;
+	let response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
+	const comment1Id = response.body.comments[0].id;
 
 	await request(app)
 		.delete(
@@ -174,17 +155,13 @@ it('should return 422 if project item ID is not in a valid mongodb format', asyn
 });
 
 it('should return 422 if project with given ID does not exist', async () => {
-	let response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText,
-		})
-		.expect(200);
-
-	const comment1Id = response.body.id;
+	let response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
+	const comment1Id = response.body.comments[0].id;
 
 	await request(app)
 		.delete(
@@ -195,17 +172,13 @@ it('should return 422 if project with given ID does not exist', async () => {
 });
 
 it('should return 422 if project ID is not in valid mongodb format', async () => {
-	let response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText,
-		})
-		.expect(200);
-
-	const comment1Id = response.body.id;
+	let response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
+	const comment1Id = response.body.comments[0].id;
 
 	await request(app)
 		.delete(
@@ -216,17 +189,13 @@ it('should return 422 if project ID is not in valid mongodb format', async () =>
 });
 
 it('should return 403 if user is not signed in', async () => {
-	let response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText,
-		})
-		.expect(200);
-
-	const comment1Id = response.body.id;
+	let response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
+	const comment1Id = response.body.comments[0].id;
 
 	await request(app)
 		.delete(
@@ -236,17 +205,13 @@ it('should return 403 if user is not signed in', async () => {
 });
 
 it('should return 403 if user is not the owner of the project', async () => {
-	let response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText,
-		})
-		.expect(200);
-
-	const comment1Id = response.body.id;
+	let response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
+	const comment1Id = response.body.comments[0].id;
 
 	await request(app)
 		.delete(

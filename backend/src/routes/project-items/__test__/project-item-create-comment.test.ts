@@ -6,17 +6,15 @@ import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from '../../projects/__test__/config';
 import { config as projectItemConfig } from './config';
 import { createProject } from '../../projects/__test__/helpers';
-import { createProjectItem } from './helpers';
+import { createProjectItem, createProjectItemComment } from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
-let userAId: string;
 let userBId: string;
 let cookieUserA: string;
 let cookieUserB: string;
 let projectIdUserA: string;
 let projectIdUserB: string;
 let projectItemIdUserA: string;
-let projectItemIdUserB: string;
 
 beforeEach(async () => {
 	let response = await request(app)
@@ -28,7 +26,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userAId = response.body.id;
 	cookieUserA = parseCookieFromResponse(response);
 
 	response = await request(app)
@@ -55,29 +52,19 @@ beforeEach(async () => {
 		projectIdUserA
 	);
 	projectItemIdUserA = response.body.id;
-
-	response = await createProjectItem(
-		cookieUserB,
-		projectItemConfig.categoryTask,
-		projectIdUserB
-	);
-	projectItemIdUserB = response.body.id;
 });
 
 it('should successfully create comment and return project item containing properly serialized comment', async () => {
-	const response = await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({
-			text: projectItemConfig.commentText,
-		})
-		.expect(200);
+	const response = await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
 
 	expect(response.body.comments.length).toEqual(1);
 	expect(response.body.comments[0].text).toEqual(
-		projectItemConfig.commentText
+		projectItemConfig.commentText1
 	);
 	expect(response.body.comments[0].dateCreated.split('T')[0]).toEqual(
 		moment().format().split('T')[0]
@@ -116,7 +103,7 @@ it('should return 422 if project with specified ID does not exist', async () => 
 		)
 		.set('Cookie', cookieUserA)
 		.send({
-			text: projectItemConfig.commentText,
+			text: projectItemConfig.commentText1,
 		})
 		.expect(422);
 });
@@ -128,7 +115,7 @@ it('should return 422 if project ID is not in the valid mongodb ID format', asyn
 		)
 		.set('Cookie', cookieUserA)
 		.send({
-			text: projectItemConfig.commentText,
+			text: projectItemConfig.commentText1,
 		})
 		.expect(422);
 });
@@ -140,7 +127,7 @@ it('should return 422 if project item with specified ID does not exist', async (
 		)
 		.set('Cookie', cookieUserA)
 		.send({
-			text: projectItemConfig.commentText,
+			text: projectItemConfig.commentText1,
 		})
 		.expect(422);
 });
@@ -152,7 +139,7 @@ it('should return 422 if project item ID is not in the valid mongodb ID format',
 		)
 		.set('Cookie', cookieUserA)
 		.send({
-			text: projectItemConfig.commentText,
+			text: projectItemConfig.commentText1,
 		})
 		.expect(422);
 });
@@ -164,7 +151,7 @@ it('should return 403 if user is not the owner of the project', async () => {
 		)
 		.set('Cookie', cookieUserB)
 		.send({
-			text: projectItemConfig.commentText,
+			text: projectItemConfig.commentText1,
 		})
 		.expect(403);
 });
@@ -175,7 +162,7 @@ it('should return 403 if user is not signed in', async () => {
 			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
 		)
 		.send({
-			text: projectItemConfig.commentText,
+			text: projectItemConfig.commentText1,
 		})
 		.expect(403);
 });

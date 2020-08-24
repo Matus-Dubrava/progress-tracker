@@ -6,11 +6,9 @@ import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from '../../projects/__test__/config';
 import { config as projectItemConfig } from './config';
 import { createProject } from '../../projects/__test__/helpers';
-import { createProjectItem } from './helpers';
+import { createProjectItem, createProjectItemComment } from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
-let userAId: string;
-let userBId: string;
 let cookieUserA: string;
 let cookieUserB: string;
 let projectIdUserA: string;
@@ -27,7 +25,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userAId = response.body.id;
 	cookieUserA = parseCookieFromResponse(response);
 
 	response = await request(app)
@@ -39,7 +36,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userBId = response.body.id;
 	cookieUserB = parseCookieFromResponse(response);
 
 	response = await createProject(cookieUserA, projectConfig.testProjectName1);
@@ -57,21 +53,18 @@ beforeEach(async () => {
 });
 
 it('should return corretly serialized project item', async () => {
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({ text: projectItemConfig.commentText })
-		.expect(200);
-
-	await request(app)
-		.post(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments`
-		)
-		.set('Cookie', cookieUserA)
-		.send({ text: `${projectItemConfig.commentText}1` })
-		.expect(200);
+	await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText1
+	);
+	await createProjectItemComment(
+		cookieUserA,
+		projectIdUserA,
+		projectItemIdUserA,
+		projectItemConfig.commentText2
+	);
 
 	const response = await request(app)
 		.get(
@@ -97,13 +90,13 @@ it('should return corretly serialized project item', async () => {
 
 	expect(response.body.comments.length).toEqual(2);
 	expect(response.body.comments[0].text).toEqual(
-		projectItemConfig.commentText
+		projectItemConfig.commentText1
 	);
 	expect(response.body.comments[0].dateCreated.split('T')[0]).toEqual(
 		moment().format().split('T')[0]
 	);
 	expect(response.body.comments[1].text).toEqual(
-		`${projectItemConfig.commentText}1`
+		projectItemConfig.commentText2
 	);
 	expect(response.body.comments[1].dateCreated.split('T')[0]).toEqual(
 		moment().format().split('T')[0]

@@ -21,3 +21,20 @@ export const createProjectItem = async (
 		})
 		.expect(201);
 };
+
+export const createProjectItemComment = async (
+	cookie: string,
+	projectId: string,
+	projectItemId: string,
+	text: string
+): Promise<request.Response> => {
+	return await request(app)
+		.post(
+			`${projectConfig.baseProjectUrl}/${projectId}/items/${projectItemId}/comments`
+		)
+		.set('Cookie', cookie)
+		.send({
+			text,
+		})
+		.expect(200);
+};
