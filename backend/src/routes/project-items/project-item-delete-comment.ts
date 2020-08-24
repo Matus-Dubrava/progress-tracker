@@ -8,6 +8,7 @@ import { param } from 'express-validator';
 import { validateMongoIdFormat } from '../../services/validate-mongo-id-format';
 import { validateProjectByIdExistence } from '../../services/validate-project-by-id-existence';
 import { validateProjectItemByIdExistence } from '../../services/validate-project-item-by-id-existence';
+import { validateCommentByIdExistence } from '../../services/validate-comment-by-id-existence';
 import { Project } from '../../models/project';
 import { ProjectItem } from '../../models/project-item';
 import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
@@ -34,6 +35,9 @@ router.delete(
 		param('commentId')
 			.custom(validateMongoIdFormat)
 			.withMessage('Comment ID is not a valid mongodb ID'),
+		param('commentId')
+			.custom(validateCommentByIdExistence)
+			.withMessage('Comment with given ID does not exist'),
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {

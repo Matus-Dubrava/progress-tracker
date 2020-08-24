@@ -102,13 +102,22 @@ it('should delete comment successfully and return 204', async () => {
 	expect(response.body.comments.length).toEqual(0);
 });
 
-it('should return 204 even if the comment does not exist', async () => {
+// it('should return 204 even if the comment does not exist', async () => {
+// 	await request(app)
+// 		.delete(
+// 			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments/${projectConfig.testProjectId}`
+// 		)
+// 		.set('Cookie', cookieUserA)
+// 		.expect(204);
+// });
+
+it('should return 422 if comment item with given ID does not exist', async () => {
 	await request(app)
 		.delete(
 			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments/${projectConfig.testProjectId}`
 		)
 		.set('Cookie', cookieUserA)
-		.expect(204);
+		.expect(422);
 });
 
 it('should return 422 if comment ID is not in a valid mongodb format', async () => {
