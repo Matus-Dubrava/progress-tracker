@@ -9,6 +9,8 @@ import {
 	createProjectItem,
 	createProjectItemComment,
 	updateProjectItemComment,
+	fetchProjectItem,
+	fetchProject,
 } from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
@@ -120,12 +122,12 @@ it('should update project item dateUpdated attribute', async () => {
 	);
 	const commentId = response.body.comments[0].id;
 
-	response = await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	response = await fetchProjectItem({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		expect: 200,
+	});
 
 	const oldDateUpdated = response.body.dateUpdated;
 
@@ -138,12 +140,12 @@ it('should update project item dateUpdated attribute', async () => {
 		expect: 200,
 	});
 
-	response = await request(app)
-		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}`
-		)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	response = await fetchProjectItem({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		expect: 200,
+	});
 
 	expect(response.body.dateUpdated).not.toEqual(oldDateUpdated);
 });
@@ -157,10 +159,11 @@ it('should update project dateUpdated attribute', async () => {
 	);
 	const commentId = response.body.comments[0].id;
 
-	response = await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectIdUserA}`)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	response = await fetchProject({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		expect: 200,
+	});
 
 	const oldDateUpdated = response.body.dateUpdated;
 
@@ -173,10 +176,11 @@ it('should update project dateUpdated attribute', async () => {
 		expect: 200,
 	});
 
-	response = await request(app)
-		.get(`${projectConfig.baseProjectUrl}/${projectIdUserA}`)
-		.set('Cookie', cookieUserA)
-		.expect(200);
+	response = await fetchProject({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		expect: 200,
+	});
 
 	expect(response.body.dateUpdated).not.toEqual(oldDateUpdated);
 });

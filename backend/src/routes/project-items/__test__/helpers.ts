@@ -75,3 +75,47 @@ export const updateProjectItemComment = async ({
 			.expect(expect);
 	}
 };
+
+export const fetchProjectItem = async ({
+	cookie,
+	projectId,
+	itemId,
+	expect,
+}: {
+	cookie?: string;
+	projectId: string;
+	itemId: string;
+	expect: number;
+}): Promise<request.Response> => {
+	if (cookie) {
+		return await request(app)
+			.get(`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}`)
+			.set('Cookie', cookie)
+			.expect(expect);
+	} else {
+		return await request(app)
+			.get(`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}`)
+			.expect(expect);
+	}
+};
+
+export const fetchProject = async ({
+	cookie,
+	projectId,
+	expect,
+}: {
+	cookie?: string;
+	projectId: string;
+	expect: number;
+}): Promise<request.Response> => {
+	if (cookie) {
+		return await request(app)
+			.get(`${projectConfig.baseProjectUrl}/${projectId}`)
+			.set('Cookie', cookie)
+			.expect(expect);
+	} else {
+		return await request(app)
+			.get(`${projectConfig.baseProjectUrl}/${projectId}`)
+			.expect(expect);
+	}
+};
