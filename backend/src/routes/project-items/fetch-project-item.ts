@@ -1,0 +1,50 @@
+import { Router, Request, Response } from 'express';
+import { param } from 'express-validator';
+
+import { requireAuth } from '../../middleware/require-auth';
+import { currentUser } from '../../middleware/current-user';
+import { validateMongoIdFormat } from '../../services/validate-mongo-id-format';
+import { validateProjectByIdExistence } from '../../services/validate-project-by-id-existence';
+import { validateProjectItemByIdExistence } from '../../services/validate-project-item-by-id-existence';
+import { validateRequest } from '../../middleware/validate-request';
+import { Project } from '../../models/project';
+import { ProjectItem } from '../../models/project-item';
+import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
+import { serializeProjectItem } from '../../services/serialize-project-item';
+
+const router = Router();
+
+router.get(
+	`/projects/:projectId/items/:itemId`,
+	currentUser,
+	requireAuth,
+	[
+		param('projectId')
+			.custom(validateMongoIdFormat)
+			.withMessage('Project ID is not a valid mongodb ID'),
+		param('projectId')
+			.custom(validateProjectByIdExistence)
+			.withMessage('Project with given ID does not exist'),
+		param('itemId')
+			.custom(validateMongoIdFormat)
+			.withMessage('Project item ID is not a valid mongodb ID'),
+		param('itemId')
+			.custom(validateProjectItemByIdExistence)
+			.withMessage('Project item with given ID does not exist'),
+	],
+	validateRequest,
+	async (req: Request, res: Response) => {
+		const { itemId, projectId } = req.params;
+
+		const project = await Project.findById(projectId);
+		if (project!.ownerId.toString() !== req.currentUser!.id) {
+			throw new ForbiddenResourceError();
+		}
+
+		const projectItem = await ProjectItem.findById(itemId);
+
+		return res.send(serializeProjectItem(projectItem!));
+	}
+);
+
+export { router as fetchProjectItemRouter };
