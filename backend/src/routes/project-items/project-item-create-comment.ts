@@ -60,4 +60,4 @@ router.post(
 	}
 );
 
-export { router as projectItemCreateComment };
+export { router as projectItemCreateCommentRouter };

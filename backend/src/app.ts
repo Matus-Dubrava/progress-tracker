@@ -20,7 +20,8 @@ import { fetchProjectsSummaryRouter } from './routes/projects/fetch-projects-sum
 
 import { createProjectItemRouter } from './routes/project-items/create-project-item';
 import { fetchProjectItemsRouter } from './routes/project-items/fetch-project-items';
-import { projectItemCreateComment } from './routes/project-items/project-item-create-comment';
+import { projectItemCreateCommentRouter } from './routes/project-items/project-item-create-comment';
+import { projectItemDeleteCommentRouter } from './routes/project-items/project-item-delete-comment';
 
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
@@ -75,7 +76,8 @@ app.use(authBaseUrlPath, signoutRouter);
 app.use(authBaseUrlPath, deleteUserRouter);
 
 // project item routes
-app.use(projectBaseUrlPath, projectItemCreateComment);
+app.use(projectBaseUrlPath, projectItemDeleteCommentRouter);
+app.use(projectBaseUrlPath, projectItemCreateCommentRouter);
 app.use(projectBaseUrlPath, createProjectItemRouter);
 app.use(projectBaseUrlPath, fetchProjectItemsRouter);
 
