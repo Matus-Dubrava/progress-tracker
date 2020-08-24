@@ -49,21 +49,24 @@ beforeEach(async () => {
 });
 
 it('should return all project items if no query string param is set', async () => {
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryIssue,
-		projectIdUserA
-	);
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryIssue,
-		projectIdUserA
-	);
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryTask,
-		projectIdUserA
-	);
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryIssue,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryIssue,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryTask,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
 
 	const response = await request(app)
 		.get(`${projectConfig.baseProjectUrl}/${projectIdUserA}/items`)
@@ -74,13 +77,14 @@ it('should return all project items if no query string param is set', async () =
 });
 
 it('should return properly serialized project items', async () => {
-	let response = await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryTask,
-		projectIdUserA
-	);
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryTask,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
 
-	response = await request(app)
+	let response = await request(app)
 		.get(`${projectConfig.baseProjectUrl}/${projectIdUserA}/items`)
 		.set('Cookie', cookieUserA)
 		.expect(200);
@@ -104,21 +108,24 @@ it('should return properly serialized project items', async () => {
 });
 
 it("should not return items that belong to user with different ID than the project owner's ID", async () => {
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryIssue,
-		projectIdUserA
-	);
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryIssue,
-		projectIdUserA
-	);
-	await createProjectItem(
-		cookieUserB,
-		projectItemConfig.categoryTask,
-		projectIdUserB
-	);
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryIssue,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryIssue,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+	await createProjectItem({
+		cookie: cookieUserB,
+		category: projectItemConfig.categoryTask,
+		projectId: projectIdUserB,
+		expect: 201,
+	});
 
 	let response = await request(app)
 		.get(`${projectConfig.baseProjectUrl}/${projectIdUserA}/items`)
@@ -139,21 +146,24 @@ it("should not return items that belong to user with different ID than the proje
 });
 
 it('should return all project items that are tasks if query string param type is set to task', async () => {
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryIssue,
-		projectIdUserA
-	);
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryIssue,
-		projectIdUserA
-	);
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryTask,
-		projectIdUserA
-	);
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryIssue,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryIssue,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryTask,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
 
 	const response = await request(app)
 		.get(
@@ -167,21 +177,24 @@ it('should return all project items that are tasks if query string param type is
 });
 
 it('should return all project items that are issues if query string param type is set to issue', async () => {
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryIssue,
-		projectIdUserA
-	);
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryIssue,
-		projectIdUserA
-	);
-	await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryTask,
-		projectIdUserA
-	);
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryIssue,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryIssue,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+	await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryTask,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
 
 	const response = await request(app)
 		.get(

@@ -45,21 +45,24 @@ beforeEach(async () => {
 	response = await createProject(cookieUserA, projectConfig.testProjectName1);
 	projectIdUserA = response.body.id;
 
-	response = await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryTask,
-		projectIdUserA
-	);
+	response = await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryTask,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
+
 	projectItemIdUserA = response.body.id;
 });
 
 it('should update comment successfully, dateCreated should be left untouched, updated project item should be returned', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 	const commentId = response.body.comments[0].id;
 	const dateCreated = response.body.comments[0].dateCreated;
 
@@ -80,20 +83,22 @@ it('should update comment successfully, dateCreated should be left untouched, up
 });
 
 it('should not affect other comments', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 	const comment1Id = response.body.comments[0].id;
 
-	response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const dateCreated = response.body.comments[1].dateCreated;
 
@@ -114,12 +119,13 @@ it('should not affect other comments', async () => {
 });
 
 it('should update project item dateUpdated attribute', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 	const commentId = response.body.comments[0].id;
 
 	response = await fetchProjectItem({
@@ -151,12 +157,13 @@ it('should update project item dateUpdated attribute', async () => {
 });
 
 it('should update project dateUpdated attribute', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 	const commentId = response.body.comments[0].id;
 
 	response = await fetchProject({
@@ -186,12 +193,13 @@ it('should update project dateUpdated attribute', async () => {
 });
 
 it('should return 422 if comment with given ID does not exist', async () => {
-	await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	await updateProjectItemComment({
 		cookie: cookieUserA,
@@ -204,12 +212,13 @@ it('should return 422 if comment with given ID does not exist', async () => {
 });
 
 it('should return 422 if comment ID is not in a valid mongodb format', async () => {
-	await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	await updateProjectItemComment({
 		cookie: cookieUserA,
@@ -222,12 +231,13 @@ it('should return 422 if comment ID is not in a valid mongodb format', async () 
 });
 
 it('should return 422 if project item with given ID does not exist', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const commentId = response.body.comments[0].id;
 
@@ -242,12 +252,13 @@ it('should return 422 if project item with given ID does not exist', async () =>
 });
 
 it('should return 422 if project item ID is not in a valid mongodb format', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const commentId = response.body.comments[0].id;
 
@@ -262,12 +273,13 @@ it('should return 422 if project item ID is not in a valid mongodb format', asyn
 });
 
 it('should return 422 if project with given ID does not exist', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const commentId = response.body.comments[0].id;
 
@@ -282,12 +294,13 @@ it('should return 422 if project with given ID does not exist', async () => {
 });
 
 it('should return 422 if project ID is not in valid mongodb format', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const commentId = response.body.comments[0].id;
 
@@ -302,12 +315,13 @@ it('should return 422 if project ID is not in valid mongodb format', async () =>
 });
 
 it('should return 403 if user is not signed in', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const commentId = response.body.comments[0].id;
 
@@ -321,12 +335,13 @@ it('should return 403 if user is not signed in', async () => {
 });
 
 it('should return 403 if user is not the owner of the project', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const commentId = response.body.comments[0].id;
 
@@ -341,12 +356,13 @@ it('should return 403 if user is not the owner of the project', async () => {
 });
 
 it('should return 422 it attribute [text] is not specified', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const commentId = response.body.comments[0].id;
 
@@ -360,12 +376,13 @@ it('should return 422 it attribute [text] is not specified', async () => {
 });
 
 it('should return 422 it attribute [text] is not at least 15 characters long', async () => {
-	let response = await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
+	let response = await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
 
 	const commentId = response.body.comments[0].id;
 
@@ -378,3 +395,25 @@ it('should return 422 it attribute [text] is not at least 15 characters long', a
 		expect: 422,
 	});
 });
+
+// it("should return 403 if project is closed", async () => {
+//     let response = await createProjectItemComment(
+// 		cookieUserA,
+// 		projectIdUserA,
+// 		projectItemIdUserA,
+// 		projectItemConfig.commentText1
+//     );
+
+//     const commentId = response.body.comments[0].id;
+
+// TODO: update project status
+
+//     await updateProjectItemComment({
+// 		cookie: cookieUserA,
+// 		projectId: projectIdUserA,
+// 		itemId: projectItemIdUserA,
+// 		commentId,
+// 		text: projectItemConfig.invalidCommentText,
+// 		expect: 422,
+// 	});
+// });

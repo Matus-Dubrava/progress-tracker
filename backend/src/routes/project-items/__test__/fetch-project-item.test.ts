@@ -44,27 +44,31 @@ beforeEach(async () => {
 	response = await createProject(cookieUserB, projectConfig.testProjectName2);
 	projectIdUserB = response.body.id;
 
-	response = await createProjectItem(
-		cookieUserA,
-		projectItemConfig.categoryTask,
-		projectIdUserA
-	);
+	response = await createProjectItem({
+		cookie: cookieUserA,
+		category: projectItemConfig.categoryTask,
+		projectId: projectIdUserA,
+		expect: 201,
+	});
 	projectItemIdUserA = response.body.id;
 });
 
 it('should return corretly serialized project item', async () => {
-	await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText1
-	);
-	await createProjectItemComment(
-		cookieUserA,
-		projectIdUserA,
-		projectItemIdUserA,
-		projectItemConfig.commentText2
-	);
+	await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText1,
+		expect: 200,
+	});
+
+	await createProjectItemComment({
+		cookie: cookieUserA,
+		projectId: projectIdUserA,
+		itemId: projectItemIdUserA,
+		text: projectItemConfig.commentText2,
+		expect: 200,
+	});
 
 	const response = await request(app)
 		.get(
