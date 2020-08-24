@@ -38,3 +38,40 @@ export const createProjectItemComment = async (
 		})
 		.expect(200);
 };
+
+export const updateProjectItemComment = async ({
+	cookie = undefined,
+	projectId,
+	itemId,
+	commentId,
+	text = undefined,
+	expect,
+}: {
+	cookie?: string;
+	projectId: string;
+	itemId: string;
+	commentId: string;
+	text?: string;
+	expect: number;
+}): Promise<request.Response> => {
+	if (cookie) {
+		return await request(app)
+			.post(
+				`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}/comments/${commentId}`
+			)
+			.set('Cookie', cookie)
+			.send({
+				text,
+			})
+			.expect(expect);
+	} else {
+		return await request(app)
+			.post(
+				`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}/comments/${commentId}`
+			)
+			.send({
+				text,
+			})
+			.expect(expect);
+	}
+};
