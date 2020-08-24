@@ -40,11 +40,11 @@ export const createProjectItemComment = async (
 };
 
 export const updateProjectItemComment = async ({
-	cookie = undefined,
+	cookie,
 	projectId,
 	itemId,
 	commentId,
-	text = undefined,
+	text,
 	expect,
 }: {
 	cookie?: string;
