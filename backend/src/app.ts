@@ -23,6 +23,7 @@ import { fetchProjectItemsRouter } from './routes/project-items/fetch-project-it
 import { fetchProjectItemRouter } from './routes/project-items/fetch-project-item';
 import { projectItemCreateCommentRouter } from './routes/project-items/project-item-create-comment';
 import { projectItemDeleteCommentRouter } from './routes/project-items/project-item-delete-comment';
+import { projectItemUpdateCommentRouter } from './routes/project-items/project-item-update-comment';
 
 import { NotFoundError } from './errors/not-found-error';
 import { handleError } from './middleware/handle-error';
@@ -77,6 +78,7 @@ app.use(authBaseUrlPath, signoutRouter);
 app.use(authBaseUrlPath, deleteUserRouter);
 
 // project item routes
+app.use(projectBaseUrlPath, projectItemUpdateCommentRouter);
 app.use(projectBaseUrlPath, projectItemDeleteCommentRouter);
 app.use(projectBaseUrlPath, projectItemCreateCommentRouter);
 app.use(projectBaseUrlPath, createProjectItemRouter);
