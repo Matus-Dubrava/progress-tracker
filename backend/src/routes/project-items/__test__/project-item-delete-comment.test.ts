@@ -9,14 +9,11 @@ import { createProject } from '../../projects/__test__/helpers';
 import { createProjectItem } from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
-let userAId: string;
-let userBId: string;
 let cookieUserA: string;
 let cookieUserB: string;
 let projectIdUserA: string;
 let projectIdUserB: string;
 let projectItemIdUserA: string;
-let projectItemIdUserB: string;
 
 beforeEach(async () => {
 	let response = await request(app)
@@ -28,7 +25,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userAId = response.body.id;
 	cookieUserA = parseCookieFromResponse(response);
 
 	response = await request(app)
@@ -40,7 +36,6 @@ beforeEach(async () => {
 		})
 		.expect(201);
 
-	userBId = response.body.id;
 	cookieUserB = parseCookieFromResponse(response);
 
 	response = await createProject(cookieUserA, projectConfig.testProjectName1);
@@ -55,13 +50,6 @@ beforeEach(async () => {
 		projectIdUserA
 	);
 	projectItemIdUserA = response.body.id;
-
-	response = await createProjectItem(
-		cookieUserB,
-		projectItemConfig.categoryTask,
-		projectIdUserB
-	);
-	projectItemIdUserB = response.body.id;
 });
 
 it('should delete comment successfully and return 204', async () => {
@@ -75,7 +63,7 @@ it('should delete comment successfully and return 204', async () => {
 		})
 		.expect(200);
 
-	const comment1Id = response.body.id;
+	const comment1Id = response.body.comments[0].id;
 
 	response = await request(app)
 		.post(
@@ -87,9 +75,9 @@ it('should delete comment successfully and return 204', async () => {
 		})
 		.expect(200);
 
-	const comment2Id = response.body.id;
+	const comment2Id = response.body.comments[1].id;
 
-	response = await request(app)
+	await request(app)
 		.delete(
 			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments/${comment1Id}`
 		)
@@ -98,33 +86,40 @@ it('should delete comment successfully and return 204', async () => {
 
 	response = await request(app)
 		.get(
-			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectIdUserA}`
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}`
 		)
 		.set('Cookie', cookieUserA)
 		.expect(200);
 
 	expect(response.body.comments.length).toEqual(1);
 	expect(response.body.comments[0].text).toEqual(
-		projectItemConfig.commentText
+		`${projectItemConfig.commentText}1`
 	);
 
-	response = await request(app)
+	await request(app)
 		.delete(
 			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments/${comment2Id}`
 		)
 		.set('Cookie', cookieUserA)
 		.expect(204);
 
+	response = await request(app)
+		.get(
+			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}`
+		)
+		.set('Cookie', cookieUserA)
+		.expect(200);
+
 	expect(response.body.comments.length).toEqual(0);
 });
 
-it('should return 422 if comment with given ID does not exist', async () => {
+it('should return 204 even if the comment does not exist', async () => {
 	await request(app)
 		.delete(
 			`${projectConfig.baseProjectUrl}/${projectIdUserA}/items/${projectItemIdUserA}/comments/${projectConfig.testProjectId}`
 		)
 		.set('Cookie', cookieUserA)
-		.expect(422);
+		.expect(204);
 });
 
 it('should return 422 if comment ID is not in a valid mongodb format', async () => {
