@@ -7,7 +7,8 @@ import { validateRequest } from '../../middleware/validate-request';
 import { validateMongoId } from '../../middleware/validate-mongo-id';
 import { validateCategoryValue } from '../../services/validate-category-value';
 import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
-import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
+import { RequestForbiddenError } from '../../errors/request-forbidden-error';
+import { RequestUnathorizedError } from '../../errors/request-unauthorized-error';
 import { serializeProjectItem } from '../../services/serialize-project-item';
 import { Project } from '../../models/project';
 import { ProjectItem } from '../../models/project-item';
@@ -44,12 +45,12 @@ router.post(
 
 		// check whether current user is owner of the project
 		if (project.ownerId.toString() !== req.currentUser!.id) {
-			throw new ForbiddenResourceError();
+			throw new RequestUnathorizedError();
 		}
 
 		// can't create items in closed project
 		if (project.isFinished) {
-			throw new ForbiddenResourceError();
+			throw new RequestForbiddenError("Closed project can't be updated");
 		}
 
 		const projectItem = await ProjectItem.build({

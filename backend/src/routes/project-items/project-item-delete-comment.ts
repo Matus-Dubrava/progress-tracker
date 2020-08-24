@@ -11,7 +11,7 @@ import { validateProjectItemByIdExistence } from '../../services/validate-projec
 import { validateCommentByIdExistence } from '../../services/validate-comment-by-id-existence';
 import { Project } from '../../models/project';
 import { ProjectItem } from '../../models/project-item';
-import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
+import { RequestUnathorizedError } from '../../errors/request-unauthorized-error';
 
 const router = Router();
 
@@ -45,7 +45,7 @@ router.delete(
 
 		const project = await Project.findById(projectId);
 		if (project!.ownerId.toString() !== req.currentUser!.id) {
-			throw new ForbiddenResourceError();
+			throw new RequestUnathorizedError();
 		}
 
 		await ProjectItem.updateOne(

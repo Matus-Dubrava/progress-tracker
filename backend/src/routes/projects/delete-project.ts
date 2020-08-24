@@ -3,9 +3,9 @@ import { Router, Request, Response } from 'express';
 import { requireAuth } from '../../middleware/require-auth';
 import { currentUser } from '../../middleware/current-user';
 import { validateMongoId } from '../../middleware/validate-mongo-id';
-import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
 import { NotFoundError } from '../../errors/not-found-error';
-import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
+import { RequestForbiddenError } from '../../errors/request-forbidden-error';
+import { RequestUnathorizedError } from '../../errors/request-unauthorized-error';
 import { Project } from '../../models/project';
 
 const router = Router();
@@ -26,7 +26,7 @@ router.delete(
 
 		// users can access only their own projects
 		if (project.ownerId.toString() !== req.currentUser!.id) {
-			throw new ForbiddenResourceError();
+			throw new RequestUnathorizedError();
 		}
 
 		await Project.findByIdAndDelete(projectId);

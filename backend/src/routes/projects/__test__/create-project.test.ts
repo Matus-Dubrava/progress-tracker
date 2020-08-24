@@ -104,7 +104,7 @@ it('should fail with 422 if project with supplied name already exists', async ()
 		.expect(422);
 });
 
-it('should fail with 403 if user is not signed in', async () => {
+it('should fail with 401 if user is not signed in', async () => {
 	await request(app)
 		.post(projectConfig.baseProjectUrl)
 		.send({
@@ -112,5 +112,5 @@ it('should fail with 403 if user is not signed in', async () => {
 			description: projectConfig.testProjectDescription,
 			ownerId: userId,
 		})
-		.expect(403);
+		.expect(401);
 });

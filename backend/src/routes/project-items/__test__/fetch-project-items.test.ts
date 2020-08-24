@@ -242,11 +242,11 @@ it('should return 422 if query string param type is set to something else than t
 	});
 });
 
-it('should return 403 if user is not signed in', async () => {
+it('should return 401 if user is not signed in', async () => {
 	await fetchProjectItems({
 		projectId: projectIdUserA,
 		category: projectItemConfig.categoryIssue,
-		expect: 403,
+		expect: 401,
 	});
 });
 

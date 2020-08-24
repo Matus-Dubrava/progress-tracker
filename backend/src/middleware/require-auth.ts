@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { ForbiddenResourceError } from '../errors/forbidden-resource-error';
+import { RequestUnathorizedError } from '../errors/request-unauthorized-error';
 
 export const requireAuth = (
 	req: Request,
@@ -8,7 +8,7 @@ export const requireAuth = (
 	next: NextFunction
 ) => {
 	if (!req.currentUser) {
-		throw new ForbiddenResourceError();
+		throw new RequestUnathorizedError();
 	}
 
 	next();

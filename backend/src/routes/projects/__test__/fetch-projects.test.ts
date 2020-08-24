@@ -58,8 +58,8 @@ it('should return all projects that belong to the user that is requesting them',
 	expect(response.body[0].name).toEqual(projectConfig.testProjectName3);
 });
 
-it('should return 403 forbidden if user is not signed in', async () => {
-	await request(app).get(projectConfig.baseProjectUrl).expect(403);
+it('should return 401 forbidden if user is not signed in', async () => {
+	await request(app).get(projectConfig.baseProjectUrl).expect(401);
 });
 
 it('should return empty list if user does not have any projects', async () => {

@@ -55,7 +55,7 @@ it('should delete project successfully and return 204', async () => {
 		.expect(404);
 });
 
-it('should return 403 if valid cookie is not present', async () => {
+it('should return 401 if user is not signed in', async () => {
 	const response = await createProject(
 		cookieUserA,
 		projectConfig.testProjectName1
@@ -64,7 +64,7 @@ it('should return 403 if valid cookie is not present', async () => {
 
 	await request(app)
 		.delete(`${projectConfig.baseProjectUrl}/${projectId}`)
-		.expect(403);
+		.expect(401);
 });
 
 it("should return 404 if specified project doesn't exist", async () => {
@@ -76,7 +76,7 @@ it("should return 404 if specified project doesn't exist", async () => {
 		.expect(404);
 });
 
-it('should return 403 if user tries to delete project that it is not the owner of', async () => {
+it('should return 401 if user tries to delete project that it is not the owner of', async () => {
 	const response = await createProject(
 		cookieUserA,
 		projectConfig.testProjectName1
@@ -86,7 +86,7 @@ it('should return 403 if user tries to delete project that it is not the owner o
 	await request(app)
 		.delete(`${projectConfig.baseProjectUrl}/${projectId}`)
 		.set('Cookie', cookieUserB)
-		.expect(403);
+		.expect(401);
 });
 
 it('should fail with 422 if ID of the project is not 24 characters long', async () => {

@@ -5,8 +5,8 @@ import { requireAuth } from '../../middleware/require-auth';
 import { validateMongoId } from '../../middleware/validate-mongo-id';
 import { Project } from '../../models/project';
 import { NotFoundError } from '../../errors/not-found-error';
-import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
-import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
+import { RequestForbiddenError } from '../../errors/request-forbidden-error';
+import { RequestUnathorizedError } from '../../errors/request-unauthorized-error';
 import { serializeProject } from '../../services/serialize-project';
 
 const router = Router();
@@ -27,7 +27,7 @@ router.get(
 
 		// users can access only their own projects
 		if (project.ownerId.toString() !== req.currentUser!.id) {
-			throw new ForbiddenResourceError();
+			throw new RequestUnathorizedError();
 		}
 
 		return res.send(serializeProject(project));

@@ -1,15 +1,15 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
-import moment, { isDuration } from 'moment';
+import moment from 'moment';
 
 import { currentUser } from '../../middleware/current-user';
 import { requireAuth } from '../../middleware/require-auth';
 import { validateMongoId } from '../../middleware/validate-mongo-id';
 import { validateRequest } from '../../middleware/validate-request';
 import { Project } from '../../models/project';
-import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
 import { NotFoundError } from '../../errors/not-found-error';
-import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
+import { RequestForbiddenError } from '../../errors/request-forbidden-error';
+import { RequestUnathorizedError } from '../../errors/request-unauthorized-error';
 import { serializeProject } from '../../services/serialize-project';
 
 const router = Router();
@@ -36,7 +36,7 @@ router.post(
 		}
 
 		if (project.ownerId.toString() !== req.currentUser!.id) {
-			throw new ForbiddenResourceError();
+			throw new RequestUnathorizedError();
 		}
 
 		let dateFinished;

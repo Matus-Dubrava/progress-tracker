@@ -57,6 +57,6 @@ it("should return 204 even if the user doesn't exist", async () => {
 		.expect(204);
 });
 
-it('should fail with 403 if valid cookie is not provided', async () => {
-	await request(app).delete(`${config.baseAuthUrl}/${userId}`).expect(403);
+it('should fail with 401 if valid cookie is not provided', async () => {
+	await request(app).delete(`${config.baseAuthUrl}/${userId}`).expect(401);
 });

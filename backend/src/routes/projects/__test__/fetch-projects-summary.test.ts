@@ -68,8 +68,8 @@ it('should return correct number of total, active and closed projects that belon
 	expect(response.body.finishedProjectsCount).toEqual(0);
 });
 
-it('should return 403 if user is not signed in', async () => {
+it('should return 401 if user is not signed in', async () => {
 	await request(app)
 		.get(`${projectConfig.baseProjectUrl}/summary`)
-		.expect(403);
+		.expect(401);
 });

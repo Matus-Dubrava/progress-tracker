@@ -116,24 +116,24 @@ it('should return 422 if project ID is not in the valid mongodb ID format', asyn
 	});
 });
 
-it('should return 403 if user is not signed in', async () => {
+it('should return 401 if user is not signed in', async () => {
 	await createProjectItem({
 		projectId,
 		description: projectItemConfig.testDescription,
 		title: projectItemConfig.testTitle,
 		category: projectItemConfig.categoryTask,
-		expect: 403,
+		expect: 401,
 	});
 });
 
-it("should return 403 if signed in user's ID doesn't match the project owner's ID", async () => {
+it("should return 401 if signed in user's ID doesn't match the project owner's ID", async () => {
 	await createProjectItem({
 		cookie: cookieUserB,
 		projectId,
 		description: projectItemConfig.testDescription,
 		title: projectItemConfig.testTitle,
 		category: projectItemConfig.categoryTask,
-		expect: 403,
+		expect: 401,
 	});
 });
 

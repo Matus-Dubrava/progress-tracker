@@ -9,7 +9,8 @@ import { validateProjectItemByIdExistence } from '../../services/validate-projec
 import { validateRequest } from '../../middleware/validate-request';
 import { Project } from '../../models/project';
 import { ProjectItem } from '../../models/project-item';
-import { ForbiddenResourceError } from '../../errors/forbidden-resource-error';
+import { RequestForbiddenError } from '../../errors/request-forbidden-error';
+import { RequestUnathorizedError } from '../../errors/request-unauthorized-error';
 import { serializeProjectItem } from '../../services/serialize-project-item';
 
 const router = Router();
@@ -38,7 +39,7 @@ router.get(
 
 		const project = await Project.findById(projectId);
 		if (project!.ownerId.toString() !== req.currentUser!.id) {
-			throw new ForbiddenResourceError();
+			throw new RequestUnathorizedError();
 		}
 
 		const projectItem = await ProjectItem.findById(itemId);

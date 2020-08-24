@@ -149,19 +149,19 @@ it('should return 422 if project item ID is not valid mongodb ID format', async 
 	});
 });
 
-it('should return 403 if user is not signed in', async () => {
+it('should return 401 if user is not signed in', async () => {
 	await fetchProjectItem({
 		projectId: projectIdUserA,
 		itemId: projectItemIdUserA,
-		expect: 403,
+		expect: 401,
 	});
 });
 
-it('should return 403 if user is not the owner of the project', async () => {
+it('should return 401 if user is not the owner of the project', async () => {
 	await fetchProjectItem({
 		cookie: cookieUserB,
 		projectId: projectIdUserA,
 		itemId: projectItemIdUserA,
-		expect: 403,
+		expect: 401,
 	});
 });

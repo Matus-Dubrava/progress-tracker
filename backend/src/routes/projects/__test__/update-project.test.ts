@@ -156,7 +156,7 @@ it('should be able to update each attribute [description, isFinished] separately
 	expect(response.body.isFinished).toBeTruthy();
 });
 
-it('should fail with 403 forbidden when no cookie is present', async () => {
+it('should fail with 401 forbidden when no cookie is present', async () => {
 	let response = await createProject(
 		cookieUserA,
 		projectConfig.testProjectName1
@@ -165,10 +165,10 @@ it('should fail with 403 forbidden when no cookie is present', async () => {
 
 	response = await request(app)
 		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
-		.expect(403);
+		.expect(401);
 });
 
-it('should fail with 403 if user updating a project is not its owner', async () => {
+it('should fail with 401 if user updating a project is not its owner', async () => {
 	let response = await createProject(
 		cookieUserA,
 		projectConfig.testProjectName1
@@ -178,7 +178,7 @@ it('should fail with 403 if user updating a project is not its owner', async () 
 	response = await request(app)
 		.post(`${projectConfig.baseProjectUrl}/${projectId}`)
 		.set('Cookie', cookieUserB)
-		.expect(403);
+		.expect(401);
 });
 
 it('should fail with 422 if ID of the project is not 24 characters long', async () => {
