@@ -6,7 +6,11 @@ import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from '../../projects/__test__/config';
 import { config as projectItemConfig } from './config';
 import { createProject } from '../../projects/__test__/helpers';
-import { createProjectItem, deleteProjectItem } from './helpers';
+import {
+	createProjectItem,
+	deleteProjectItem,
+	fetchProjectItem,
+} from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
 let cookieUserA: string;
@@ -57,6 +61,13 @@ it('should delete project item successfully and return 204', async () => {
 		projectId,
 		itemId,
 		expect: 204,
+	});
+
+	await fetchProjectItem({
+		cookie: cookieUserA,
+		projectId,
+		itemId,
+		expect: 422,
 	});
 });
 
