@@ -1,7 +1,5 @@
 import request from 'supertest';
 
-import { ProjectItemCategory } from '../../../models/project-item';
-import { config as projectItemConfig } from './config';
 import { config as projectConfig } from '../../projects/__test__/config';
 import { app } from '../../../app';
 
@@ -209,6 +207,33 @@ export const deleteProjectItemComment = async ({
 		return await request(app)
 			.delete(
 				`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}/comments/${commentId}`
+			)
+			.expect(expect);
+	}
+};
+
+export const deleteProjectItem = async ({
+	cookie,
+	projectId,
+	itemId,
+	expect,
+}: {
+	cookie?: string;
+	projectId: string;
+	itemId: string;
+	expect: number;
+}): Promise<request.Response> => {
+	if (cookie) {
+		return await request(app)
+			.delete(
+				`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}`
+			)
+			.set('Cookie', cookie)
+			.expect(expect);
+	} else {
+		return await request(app)
+			.delete(
+				`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}`
 			)
 			.expect(expect);
 	}

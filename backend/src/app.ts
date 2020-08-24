@@ -21,6 +21,7 @@ import { fetchProjectsSummaryRouter } from './routes/projects/fetch-projects-sum
 import { createProjectItemRouter } from './routes/project-items/create-project-item';
 import { fetchProjectItemsRouter } from './routes/project-items/fetch-project-items';
 import { fetchProjectItemRouter } from './routes/project-items/fetch-project-item';
+import { deleteProjectItemRouter } from './routes/project-items/delete-project-item';
 import { projectItemCreateCommentRouter } from './routes/project-items/project-item-create-comment';
 import { projectItemDeleteCommentRouter } from './routes/project-items/project-item-delete-comment';
 import { projectItemUpdateCommentRouter } from './routes/project-items/project-item-update-comment';
@@ -84,6 +85,7 @@ app.use(projectBaseUrlPath, projectItemCreateCommentRouter);
 app.use(projectBaseUrlPath, createProjectItemRouter);
 app.use(projectBaseUrlPath, fetchProjectItemsRouter);
 app.use(projectBaseUrlPath, fetchProjectItemRouter);
+app.use(projectBaseUrlPath, deleteProjectItemRouter);
 
 // project routes
 app.use(projectBaseUrlPath, fetchProjectsSummaryRouter);
