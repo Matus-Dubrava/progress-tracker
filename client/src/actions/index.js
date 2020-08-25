@@ -10,3 +10,11 @@ export {
 	deleteProject,
 	updateProject,
 } from './projects';
+
+export {
+	fetchProjectItems,
+	createProjectItem,
+	fetchProjectItem,
+	updateProjectItemStatus,
+	deleteProjectItem,
+} from './projectItems';
