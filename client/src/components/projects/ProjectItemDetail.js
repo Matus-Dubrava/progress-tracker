@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import {
 	fetchProjectItem,
@@ -80,7 +81,12 @@ const ProjectItemDetail = ({
 				</small>
 				<br />
 				{renderedOpenCloseButton}
-				<button>add comment</button>
+				<Link
+					className="btn btn-outline-primary"
+					to={`/projects/${projectId}/items/${itemId}/comments/create`}
+				>
+					add comment
+				</Link>
 				<button
 					onClick={() => deleteProjectItem({ projectId, itemId })}
 				>

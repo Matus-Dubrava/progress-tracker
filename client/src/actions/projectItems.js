@@ -90,7 +90,6 @@ export const updateProjectItemStatus = ({
 	projectId,
 	itemId,
 }) => async (dispatch) => {
-	console.log('status updated');
 	try {
 		const response = await backendServer.post(
 			`/projects/${projectId}/items/${itemId}`,
@@ -117,5 +116,37 @@ export const deleteProjectItem = ({ projectId, itemId }) => async (
 		history.push(`/projects/${projectId}`);
 	} catch (err) {
 		console.log(err);
+	}
+};
+
+export const createComment = ({ projectId, itemId, text }) => async (
+	dispatch
+) => {
+	try {
+		const response = await backendServer.post(
+			`/projects/${projectId}/items/${itemId}/comments`,
+			{ text }
+		);
+		dispatch({
+			type: UPDATE_PROJECT_ITEM,
+			payload: response.data,
+		});
+		history.push(`/projects/${projectId}/items/${itemId}`);
+	} catch (err) {
+		// handle 422 status code by setting form error message
+		// this is due to error(s) made by user
+		if (
+			err.response.status === 422 ||
+			err.response.status === 401 ||
+			err.response.status === 403
+		) {
+			dispatch({
+				type: SET_FORM_MESSAGE,
+				payload: err.response.data,
+			});
+		} else {
+			// this error was not expected
+			console.log(err);
+		}
 	}
 };

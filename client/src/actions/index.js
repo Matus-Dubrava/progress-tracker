@@ -17,4 +17,5 @@ export {
 	fetchProjectItem,
 	updateProjectItemStatus,
 	deleteProjectItem,
+	createComment,
 } from './projectItems';

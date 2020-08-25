@@ -15,6 +15,7 @@ import ProjectDetail from './projects/ProjectDetail';
 import ProjectsDashboard from './projects/ProjectsDashboard';
 import ProjectItemCreate from './projects/ProjectItemCreate';
 import ProjectItemDetail from './projects/ProjectItemDetail';
+import ProjectItemCommentCreate from './projects/ProjectItemCommentCreate';
 import { getLoginStatus } from '../actions';
 
 function App({ getLoginStatus }) {
@@ -52,6 +53,10 @@ function App({ getLoginStatus }) {
 							<Route
 								path="/projects/:id/items/create"
 								component={ProjectItemCreate}
+							/>
+							<Route
+								path="/projects/:id/items/:itemId/comments/create"
+								component={ProjectItemCommentCreate}
 							/>
 							<Route
 								path="/projects/:id/items/:itemId"
