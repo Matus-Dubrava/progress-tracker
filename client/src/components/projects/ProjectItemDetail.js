@@ -8,6 +8,7 @@ import {
 	deleteProjectItem,
 	deleteComment,
 } from '../../actions';
+import { parseDateTime } from '../../helpers/parse-date-time';
 
 const ProjectItemDetail = ({
 	match,
@@ -43,7 +44,7 @@ const ProjectItemDetail = ({
 					key={comment.id}
 				>
 					<p>{comment.text}</p>
-					<p>{comment.dateCreated}</p>
+					<p>{parseDateTime(comment.dateCreated)}</p>
 					<button
 						onClick={() =>
 							deleteComment({
@@ -79,13 +80,15 @@ const ProjectItemDetail = ({
 			<div className="project-card" key={item.id}>
 				<h3>{item.title}</h3>
 				<p>{item.description}</p>
-				<small>date created: {item.dateCreated}</small>
+				<small>date created: {parseDateTime(item.dateCreated)}</small>
 				<br />
-				<small>last updated:{item.dateUpdated}</small>
+				<small>last updated:{parseDateTime(item.dateUpdated)}</small>
 				<br />
 				{item.isFinished && (
 					<>
-						<small>date finished: {item.dateFinished}</small>
+						<small>
+							date finished: {parseDateTime(item.dateFinished)}
+						</small>
 						<br />
 					</>
 				)}

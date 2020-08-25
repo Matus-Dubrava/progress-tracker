@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { fetchProjects, deleteProject, updateProject } from '../../actions';
 import './ProjectList.css';
+import { fetchProjects, deleteProject, updateProject } from '../../actions';
+import { parseDateTime } from '../../helpers/parse-date-time';
 
 const ProjectList = ({
 	projects,
@@ -46,13 +47,17 @@ const ProjectList = ({
 			<div className="project-card" key={project.id}>
 				<h3>{project.name}</h3>
 				<p>{project.description}</p>
-				<small>date created: {project.dateCreated}</small>
+				<small>
+					date created: {parseDateTime(project.dateCreated)}
+				</small>
 				<br />
-				<small>last updated:{project.dateUpdated}</small>
+				<small>last updated:{parseDateTime(project.dateUpdated)}</small>
 				<br />
 				{project.isFinished && (
 					<>
-						<small>date finished: {project.dateFinished}</small>
+						<small>
+							date finished: {parseDateTime(project.dateFinished)}
+						</small>
 						<br />
 					</>
 				)}

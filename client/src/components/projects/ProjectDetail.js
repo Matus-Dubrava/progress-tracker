@@ -8,6 +8,7 @@ import {
 	deleteProject,
 	fetchProjectItems,
 } from '../../actions';
+import { parseDateTime } from '../../helpers/parse-date-time';
 
 const ProjectDetail = ({
 	project,
@@ -75,8 +76,12 @@ const ProjectDetail = ({
 				>
 					<p style={{ margin: '0 1rem' }}>{item.title}</p>
 					<p style={{ margin: '0 1rem' }}>{item.category}</p>
-					<p style={{ margin: '0 1rem' }}>{item.dateCreated}</p>
-					<p style={{ margin: '0 1rem' }}>{item.dateUpdated}</p>
+					<p style={{ margin: '0 1rem' }}>
+						{parseDateTime(item.dateCreated)}
+					</p>
+					<p style={{ margin: '0 1rem' }}>
+						{parseDateTime(item.dateUpdated)}
+					</p>
 					<p style={{ margin: '0 1rem' }}>
 						{item.isFinished ? 'Closed' : 'Open'}
 					</p>
@@ -94,13 +99,17 @@ const ProjectDetail = ({
 			<div className="project-card" key={project.id}>
 				<h3>{project.name}</h3>
 				<p>{project.description}</p>
-				<small>date created: {project.dateCreated}</small>
+				<small>
+					date created: {parseDateTime(project.dateCreated)}
+				</small>
 				<br />
-				<small>last updated:{project.dateUpdated}</small>
+				<small>last updated:{parseDateTime(project.dateUpdated)}</small>
 				<br />
 				{project.isFinished && (
 					<>
-						<small>date finished: {project.dateFinished}</small>
+						<small>
+							date finished: {parseDateTime(project.dateFinished)}
+						</small>
 						<br />
 					</>
 				)}
