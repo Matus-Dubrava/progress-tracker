@@ -1,0 +1,32 @@
+.project-dashboard {
+	height: 12rem;
+	margin-bottom: 1rem;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.project-dashboard-box {
+	border: 1px solid #deeec7;
+	border-radius: 3px;
+	height: 10rem;
+	width: 10rem;
+}
+
+.project-dashboard-box-header {
+	height: 3rem;
+	color: #546b34;
+	background-color: #deeec7;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.project-dashboard-box-content {
+	color: #546b34;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 7rem;
+	font-size: 3rem;
+}

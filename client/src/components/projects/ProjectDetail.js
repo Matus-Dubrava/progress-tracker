@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchProject, fetchProjectItems } from '../../actions';
 import ProjectDetailTable from './ProjectDetailTable';
 import ProjectDetailHeader from './ProjectDetailHeader';
+import ProjectDashboard from './ProjectDashboard';
 
 const ProjectDetail = ({
 	project,
@@ -29,6 +30,7 @@ const ProjectDetail = ({
 	return (
 		<div>
 			<ProjectDetailHeader project={project} />
+			<ProjectDashboard items={projectItems} />
 			<ProjectDetailTable items={projectItems} projectId={projectId} />
 		</div>
 	);
