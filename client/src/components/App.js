@@ -9,13 +9,17 @@ import SideNavigation from './SideNavigation';
 import TopNavigation from './TopNavigation';
 import Signup from './auth/Signup';
 import Signin from './auth/Signin';
+
 import ProjectList from './projects/ProjectList';
 import ProjectCreate from './projects/ProjectCreate';
 import ProjectDetail from './projects/ProjectDetail';
-import ProjectsDashboard from './projects/ProjectsDashboard';
-import ProjectItemCreate from './projects/ProjectItemCreate';
-import ProjectItemDetail from './projects/ProjectItemDetail';
-import ProjectItemCommentCreate from './projects/ProjectItemCommentCreate';
+
+import Dashboard from './dashboard/Dashboard';
+
+import ProjectItemCreate from './project-items/ProjectItemCreate';
+import ProjectItemDetail from './project-items/ProjectItemDetail';
+import ProjectItemCommentCreate from './project-items/ProjectItemCommentCreate';
+
 import { getLoginStatus } from '../actions';
 
 function App({ getLoginStatus }) {
@@ -34,11 +38,7 @@ function App({ getLoginStatus }) {
 					<TopNavigation />
 					<div className="container app-container">
 						<Switch>
-							<Route
-								path="/"
-								exact
-								component={ProjectsDashboard}
-							/>
+							<Route path="/" exact component={Dashboard} />
 							<Route path="/signup" component={Signup} />
 							<Route path="/signin" component={Signin} />
 							<Route

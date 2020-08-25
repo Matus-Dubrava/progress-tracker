@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import './ProjectsDashboard.css';
+import './Dashboard.css';
 import { fetchProjectsSummary } from '../../actions';
 
-const ProjectsDashboard = ({ fetchProjectsSummary, projectsSummary }) => {
+const Dashboard = ({ fetchProjectsSummary, projectsSummary }) => {
 	useEffect(() => {
 		fetchProjectsSummary();
 	}, []);
@@ -45,6 +45,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, { fetchProjectsSummary })(
-	ProjectsDashboard
-);
+export default connect(mapStateToProps, { fetchProjectsSummary })(Dashboard);
