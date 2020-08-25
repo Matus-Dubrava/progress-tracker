@@ -5,6 +5,11 @@ import { parseDateTime } from '../../helpers/parse-date-time';
 import './ProjectDetailTable.css';
 
 const ProjectDetailTable = ({ items, projectId }) => {
+	// sort items from newest to oldest
+	items.sort((a, b) => {
+		return new Date(b.dateCreated) - new Date(a.dateCreated);
+	});
+
 	const renderedTableItems = items.map((item) => {
 		return (
 			<tr key={item.id}>
