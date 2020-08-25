@@ -60,7 +60,7 @@ const ProjectItemDetail = ({
 
 	return (
 		<div>
-			<div className="project-card" key={item.id}>
+			<div className="project-card content-box" key={item.id}>
 				<h3>{item.title}</h3>
 				<p>{item.description}</p>
 				<small>date created: {parseDateTime(item.dateCreated)}</small>

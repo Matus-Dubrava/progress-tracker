@@ -1,0 +1,47 @@
+.content-box {
+	width: 100%;
+	background-color: white;
+
+	-webkit-box-shadow: 0px 0px 8px 5px rgba(227, 227, 227, 1);
+	-moz-box-shadow: 0px 0px 8px 5px rgba(227, 227, 227, 1);
+	box-shadow: 0px 0px 8px 5px rgba(227, 227, 227, 1);
+}
+
+.project-detail-table td {
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	font-size: 15px;
+	padding: 5px;
+	color: #555;
+}
+
+.project-detail-table .category {
+	padding: 5px 0;
+	width: 3.5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 5px;
+}
+
+.project-detail-table .category-task {
+	background-color: #deeec7;
+	color: #546b34;
+}
+
+.project-detail-table .category-issue {
+	background-color: #fde7c6;
+	color: #a87027;
+}
+
+.project-detail-table .category-open {
+	color: #57b4d0;
+	border: 1px solid #57b4d0;
+}
+
+.project-detail-table .category-closed {
+	background-color: #57b4d0;
+	color: white;
+}
+
+/* 57B4D0 */

@@ -9,6 +9,7 @@ import {
 	fetchProjectItems,
 } from '../../actions';
 import { parseDateTime } from '../../helpers/parse-date-time';
+import ProjectDetailTable from './ProjectDetailTable';
 
 const ProjectDetail = ({
 	project,
@@ -55,48 +56,13 @@ const ProjectDetail = ({
 		}
 	};
 
-	const renderedProjectItems = projectItems.map((item) => {
-		return (
-			<Link
-				key={item.id}
-				style={{ color: 'black', textDecoration: 'none' }}
-				to={`/projects/${projectId}/items/${item.id}`}
-			>
-				<li
-					style={{
-						marginTop: '5px',
-						display: 'flex',
-						border: '1px solid #ddd',
-						alignItems: 'center',
-						padding: '0.5rem',
-						borderColor: `${
-							item.category === 'issue' ? '#FDCA18' : '#29A5BA'
-						}`,
-					}}
-				>
-					<p style={{ margin: '0 1rem' }}>{item.title}</p>
-					<p style={{ margin: '0 1rem' }}>{item.category}</p>
-					<p style={{ margin: '0 1rem' }}>
-						{parseDateTime(item.dateCreated)}
-					</p>
-					<p style={{ margin: '0 1rem' }}>
-						{parseDateTime(item.dateUpdated)}
-					</p>
-					<p style={{ margin: '0 1rem' }}>
-						{item.isFinished ? 'Closed' : 'Open'}
-					</p>
-				</li>
-			</Link>
-		);
-	});
-
 	if (!project) {
 		return <div>Loading...</div>;
 	}
 
 	return (
 		<div>
-			<div className="project-card" key={project.id}>
+			<div className="project-card content-box" key={project.id}>
 				<h3>{project.name}</h3>
 				<p>{project.description}</p>
 				<small>
@@ -137,7 +103,7 @@ const ProjectDetail = ({
 					Delete
 				</button>
 			</div>
-			<ul style={{ padding: '0' }}>{renderedProjectItems}</ul>
+			<ProjectDetailTable items={projectItems} projectId={projectId} />
 		</div>
 	);
 };

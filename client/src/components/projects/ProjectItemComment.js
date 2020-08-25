@@ -14,7 +14,7 @@ const ProjectItemComment = ({
 	deleteComment,
 }) => {
 	return (
-		<div className="project-item-comment-wrapper">
+		<div className="project-item-comment-wrapper content-box">
 			<div className="project-item-comment-date">
 				submitted at: {parseDateTime(dateCreated)}
 			</div>

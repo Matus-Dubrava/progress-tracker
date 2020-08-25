@@ -44,7 +44,7 @@ const ProjectList = ({
 
 	const renderedProjects = projects.map((project) => {
 		return (
-			<div className="project-card" key={project.id}>
+			<div className="project-card content-box" key={project.id}>
 				<h3>{project.name}</h3>
 				<p>{project.description}</p>
 				<small>
@@ -84,7 +84,7 @@ const ProjectList = ({
 
 	return (
 		<div>
-			<h1>ProjectList</h1>
+			<h1>Projects</h1>
 			<Link to="/projects/create" className="btn btn-primary mb-2">
 				Create Project
 			</Link>
