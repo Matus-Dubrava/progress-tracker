@@ -6,16 +6,15 @@ import {
 	fetchProjectItem,
 	updateProjectItemStatus,
 	deleteProjectItem,
-	deleteComment,
 } from '../../actions';
 import { parseDateTime } from '../../helpers/parse-date-time';
+import ProjectItemComment from './ProjectItemComment';
 
 const ProjectItemDetail = ({
 	match,
 	fetchProjectItem,
 	updateProjectItemStatus,
 	deleteProjectItem,
-	deleteComment,
 	item,
 }) => {
 	const projectId = match.params.id;
@@ -33,30 +32,14 @@ const ProjectItemDetail = ({
 	} else {
 		renderedComments = item.comments.map((comment) => {
 			return (
-				<li
-					style={{
-						marginTop: '5px',
-						display: 'flex',
-						border: '1px solid #ddd',
-						alignItems: 'center',
-						padding: '0.5rem',
-					}}
+				<ProjectItemComment
 					key={comment.id}
-				>
-					<p>{comment.text}</p>
-					<p>{parseDateTime(comment.dateCreated)}</p>
-					<button
-						onClick={() =>
-							deleteComment({
-								projectId,
-								itemId,
-								commentId: comment.id,
-							})
-						}
-					>
-						Delete
-					</button>
-				</li>
+					text={comment.text}
+					dateCreated={comment.dateCreated}
+					projectId={projectId}
+					itemId={itemId}
+					commentId={comment.id}
+				/>
 			);
 		});
 
@@ -124,5 +107,4 @@ export default connect(mapStateToProps, {
 	fetchProjectItem,
 	updateProjectItemStatus,
 	deleteProjectItem,
-	deleteComment,
 })(ProjectItemDetail);

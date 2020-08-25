@@ -1,0 +1,27 @@
+.project-item-comment-wrapper {
+	border: 1px solid #ddd;
+	padding: 1rem;
+}
+
+.project-item-comment-body {
+	padding: 1rem 0;
+}
+
+.project-item-comment-date {
+	font-size: 12px;
+	color: #777;
+}
+
+.project-item-comment-wrapper button {
+	outline: none;
+	border: none;
+	color: rgb(161, 55, 55);
+	background-color: transparent;
+	padding: 0;
+	margin: 0;
+	font-size: 14px;
+}
+
+.project-item-comment-wrapper button:hover {
+	text-decoration: underline;
+}
