@@ -1,0 +1,29 @@
+.project-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 2rem;
+}
+
+.project-header .status {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.5rem 1rem;
+	margin-left: 1rem;
+	border-radius: 3px;
+	font-size: 14px;
+}
+
+.project-header .status-open {
+	color: #57b4d0;
+	border: 1px solid #57b4d0;
+}
+
+.project-header .status-closed {
+	background-color: #57b4d0;
+	color: white;
+}
+
+.project-header h3 {
+	margin: 0;
+}

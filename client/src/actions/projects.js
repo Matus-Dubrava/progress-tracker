@@ -11,9 +11,9 @@ import {
 	UPDATE_PROJECT,
 } from './types';
 
-export const fetchProject = (id) => async (dispatch) => {
+export const fetchProject = ({ projectId }) => async (dispatch) => {
 	try {
-		const response = await backendServer.get(`/projects/${id}`);
+		const response = await backendServer.get(`/projects/${projectId}`);
 
 		dispatch({
 			type: FETCH_PROJECT,
