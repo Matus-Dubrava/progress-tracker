@@ -6,7 +6,11 @@ import { config as userConfig } from '../../auth/__test__/config';
 import { config as projectConfig } from '../../projects/__test__/config';
 import { config as projectItemConfig } from './config';
 import { createProject } from '../../projects/__test__/helpers';
-import { createProjectItem, updateProjectItem } from './helpers';
+import {
+	createProjectItem,
+	updateProjectItem,
+	createProjectItemComment,
+} from './helpers';
 import { parseCookieFromResponse } from '../../auth/__test__/helpers';
 
 let cookieUserA: string;
@@ -52,6 +56,16 @@ it('should update project successfully, and return properly serialized object wi
 
 	const itemId = response.body.id;
 
+	for (let i = 0; i < 2; i++) {
+		await createProjectItemComment({
+			cookie: cookieUserA,
+			projectId,
+			itemId,
+			text: projectItemConfig.commentText1,
+			expect: 200,
+		});
+	}
+
 	response = await updateProjectItem({
 		cookie: cookieUserA,
 		projectId,
@@ -72,6 +86,17 @@ it('should update project successfully, and return properly serialized object wi
 	expect(response.body.dateFinished.split('T')[0]).toEqual(
 		moment().format().split('T')[0]
 	);
+	expect(response.body.id).toEqual(itemId);
+	expect(response.body._id).toBeUndefined();
+	expect(response.body.__v).toBeUndefined();
+
+	expect(response.body.comments.length).toEqual(2);
+	expect(response.body.comments[0].id).toBeDefined();
+	expect(response.body.comments[0].text).toEqual(
+		projectItemConfig.commentText1
+	);
+	expect(response.body.comments[0]._id).toBeUndefined();
+	expect(response.body.comments[0].__v).toBeUndefined();
 });
 
 it('should be able to update title, leaving rest of the attribute unchanged, except for dateUpdated', async () => {
@@ -100,7 +125,7 @@ it('should be able to update title, leaving rest of the attribute unchanged, exc
 	);
 	expect(response.body.isFinished).toBeFalsy();
 	expect(response.body.category).toEqual(projectItemConfig.categoryIssue);
-	expect(response.body.dateFinished).toBeUndefined();
+	expect(response.body.dateFinished).toBeFalsy();
 });
 
 it('should be able to update description, leaving rest of the attribute unchanged, except for dateUpdated', async () => {
@@ -129,7 +154,7 @@ it('should be able to update description, leaving rest of the attribute unchange
 	);
 	expect(response.body.isFinished).toBeFalsy();
 	expect(response.body.category).toEqual(projectItemConfig.categoryIssue);
-	expect(response.body.dateFinished).toBeUndefined();
+	expect(response.body.dateFinished).toBeFalsy();
 });
 
 it('should be able to update isFinished, leaving rest of the attribute unchanged, except for dateUpdated and timeFinished', async () => {
@@ -156,7 +181,7 @@ it('should be able to update isFinished, leaving rest of the attribute unchanged
 	expect(response.body.description).toEqual(
 		projectItemConfig.testDescription
 	);
-	expect(response.body.isFinished).toBeFalsy();
+	expect(response.body.isFinished).toBeTruthy();
 	expect(response.body.category).toEqual(projectItemConfig.categoryIssue);
 	expect(response.body.dateFinished.split('T')[0]).toEqual(
 		moment().format().split('T')[0]
@@ -191,7 +216,7 @@ it('should set dateFinished to undefined if isFinished is set to false', async (
 		expect: 200,
 	});
 
-	expect(response.body.dateFinished).toBeUndefined();
+	expect(response.body.dateFinished).toBeFalsy();
 });
 
 it('should return 422 if category value is not valid [task, issue]', async () => {
@@ -267,8 +292,6 @@ it('should return 422 if project item with given ID does not exist', async () =>
 		expect: 201,
 	});
 
-	const itemId = response.body.id;
-
 	await updateProjectItem({
 		cookie: cookieUserA,
 		projectId,
@@ -287,8 +310,6 @@ it('should return 422 if project item ID is not valid mongodb ID format', async 
 		category: projectItemConfig.categoryIssue,
 		expect: 201,
 	});
-
-	const itemId = response.body.id;
 
 	await updateProjectItem({
 		cookie: cookieUserA,
@@ -315,7 +336,7 @@ it('should return 401 if user is not signed in', async () => {
 		projectId,
 		itemId,
 		isFinished: true,
-		expect: 422,
+		expect: 401,
 	});
 });
 
@@ -336,6 +357,6 @@ it('should return 401 if user is not the owner of the project', async () => {
 		projectId,
 		itemId,
 		isFinished: true,
-		expect: 422,
+		expect: 401,
 	});
 });

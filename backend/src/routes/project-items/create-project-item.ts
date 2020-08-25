@@ -5,7 +5,7 @@ import { currentUser } from '../../middleware/current-user';
 import { requireAuth } from '../../middleware/require-auth';
 import { validateRequest } from '../../middleware/validate-request';
 import { validateMongoId } from '../../middleware/validate-mongo-id';
-import { validateCategoryValue } from '../../services/validate-category-value';
+import { validateCategoryValueOnCreate } from '../../services/validate-category-value-on-create';
 import { CustomRequestValidationError } from '../../errors/custom-request-validation-error';
 import { RequestForbiddenError } from '../../errors/request-forbidden-error';
 import { RequestUnathorizedError } from '../../errors/request-unauthorized-error';
@@ -25,7 +25,7 @@ router.post(
 			.withMessage('Description field is required'),
 		body('title').notEmpty().withMessage('Title field is required'),
 		body('category')
-			.custom(validateCategoryValue)
+			.custom(validateCategoryValueOnCreate)
 			.withMessage('allowed category values: task, issue'),
 	],
 	validateRequest,
