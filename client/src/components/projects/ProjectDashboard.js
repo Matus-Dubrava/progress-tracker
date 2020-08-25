@@ -27,31 +27,29 @@ const ProjectDashboard = ({ items }) => {
 
 	return (
 		<div className="content-box project-dashboard">
-			<div className="project-dashboard-box">
-				<div className="project-dashboard-box-header">Active Tasks</div>
-				<div className="project-dashboard-box-content">{openTasks}</div>
+			<div className="project-dashboard-box dark-green">
+				<div className="project-dashboard-box-number dark-green">
+					{openTasks}
+				</div>
+				<div className="project-dashboard-box-sub">Active Tasks</div>
 			</div>
-			<div className="project-dashboard-box">
-				<div className="project-dashboard-box-header">Closed Tasks</div>
-				<div className="project-dashboard-box-content">
+			<div className="project-dashboard-box light-green">
+				<div className="project-dashboard-box-number light-green">
 					{closedTasks}
 				</div>
+				<div className="project-dashboard-box-sub">Closed Tasks</div>
 			</div>
-			<div className="project-dashboard-box">
-				<div className="project-dashboard-box-header">
-					Active Issues
-				</div>
-				<div className="project-dashboard-box-content">
+			<div className="project-dashboard-box dark-orange">
+				<div className="project-dashboard-box-number dark-orange">
 					{openIssues}
 				</div>
+				<div className="project-dashboard-box-sub">Active Issues</div>
 			</div>
-			<div className="project-dashboard-box">
-				<div className="project-dashboard-box-header">
-					Closed Issues
-				</div>
-				<div className="project-dashboard-box-content">
+			<div className="project-dashboard-box light-orange">
+				<div className="project-dashboard-box-number light-orange">
 					{closedIssues}
 				</div>
+				<div className="project-dashboard-box-sub">Closed Issues</div>
 			</div>
 		</div>
 	);
