@@ -8,6 +8,7 @@ import {
 	CREATE_PROJECT_ITEM,
 	DELETE_PROJECT_ITEM,
 	SET_FORM_MESSAGE,
+	DELETE_PROJECT_ITEM_COMMENT,
 } from './types';
 
 export const fetchProjectItems = ({ category, projectId }) => async (
@@ -148,5 +149,21 @@ export const createComment = ({ projectId, itemId, text }) => async (
 			// this error was not expected
 			console.log(err);
 		}
+	}
+};
+
+export const deleteComment = ({ projectId, itemId, commentId }) => async (
+	dispatch
+) => {
+	try {
+		await backendServer.delete(
+			`/projects/${projectId}/items/${itemId}/comments/${commentId}`
+		);
+		dispatch({
+			type: DELETE_PROJECT_ITEM_COMMENT,
+			payload: { commentId, itemId },
+		});
+	} catch (err) {
+		console.log(err);
 	}
 };

@@ -6,6 +6,7 @@ import {
 	fetchProjectItem,
 	updateProjectItemStatus,
 	deleteProjectItem,
+	deleteComment,
 } from '../../actions';
 
 const ProjectItemDetail = ({
@@ -13,6 +14,7 @@ const ProjectItemDetail = ({
 	fetchProjectItem,
 	updateProjectItemStatus,
 	deleteProjectItem,
+	deleteComment,
 	item,
 }) => {
 	const projectId = match.params.id;
@@ -42,6 +44,17 @@ const ProjectItemDetail = ({
 				>
 					<p>{comment.text}</p>
 					<p>{comment.dateCreated}</p>
+					<button
+						onClick={() =>
+							deleteComment({
+								projectId,
+								itemId,
+								commentId: comment.id,
+							})
+						}
+					>
+						Delete
+					</button>
 				</li>
 			);
 		});
@@ -108,4 +121,5 @@ export default connect(mapStateToProps, {
 	fetchProjectItem,
 	updateProjectItemStatus,
 	deleteProjectItem,
+	deleteComment,
 })(ProjectItemDetail);

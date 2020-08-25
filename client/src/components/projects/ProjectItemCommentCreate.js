@@ -78,9 +78,7 @@ const ProjectItemCommentCreate = ({
 								className="form-control"
 								value={values.name}
 								onChange={handleChange}
-							>
-								Enter text here...
-							</textarea>
+							></textarea>
 							{errors.text && touched.text ? (
 								<small className="field-error">
 									{errors.text}
