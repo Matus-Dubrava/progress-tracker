@@ -6,79 +6,33 @@ import './ProjectList.css';
 import { fetchProjects, deleteProject, updateProject } from '../../actions';
 import { parseDateTime } from '../../helpers/parse-date-time';
 
-const ProjectList = ({
-	projects,
-	fetchProjects,
-	deleteProject,
-	updateProject,
-}) => {
+const ProjectList = ({ projects, fetchProjects }) => {
 	useEffect(() => {
 		fetchProjects();
 	}, []);
 
-	const renderUpdateButton = ({ id, isFinished }) => {
-		if (isFinished) {
-			return (
-				<button
-					onClick={() => {
-						updateProject({ id, isFinished: false });
-					}}
-					className="btn btn-success ml-2"
-				>
-					Reopen
-				</button>
-			);
-		} else {
-			return (
-				<button
-					onClick={() => {
-						updateProject({ id, isFinished: true });
-					}}
-					className="btn btn-success ml-2"
-				>
-					Close
-				</button>
-			);
-		}
-	};
-
 	const renderedProjects = projects.map((project) => {
 		return (
-			<div className="project-card content-box" key={project.id}>
-				<h3>{project.name}</h3>
-				<p>{project.description}</p>
-				<small>
-					date created: {parseDateTime(project.dateCreated)}
-				</small>
-				<br />
-				<small>last updated:{parseDateTime(project.dateUpdated)}</small>
-				<br />
-				{project.isFinished && (
-					<>
-						<small>
-							date finished: {parseDateTime(project.dateFinished)}
-						</small>
-						<br />
-					</>
-				)}
-				<small>
-					finished status: {project.isFinished ? 'Closed' : 'Open'}
-				</small>
-				<br />
-				{renderUpdateButton(project)}
-				<Link
-					className="btn btn-primary ml-2"
-					to={`/projects/${project.id}`}
-				>
-					View
-				</Link>
-				<button
-					onClick={() => deleteProject(project.id)}
-					className="btn btn-danger ml-2"
-				>
-					Delete
-				</button>
-			</div>
+			<tr key={project.id}>
+				<td>
+					<Link to={`/projects/${project.id}`}>{project.name}</Link>
+				</td>
+				<td>
+					<span
+						className={`category category-${
+							project.isFinished ? 'closed' : 'open'
+						}`}
+					>
+						{project.isFinished ? 'closed' : 'open'}
+					</span>
+				</td>
+				<td>{parseDateTime(project.dateCreated)}</td>
+				<td>{parseDateTime(project.dateUpdated)}</td>
+				<td>
+					{project.dateFinished &&
+						parseDateTime(project.dateFinished)}
+				</td>
+			</tr>
 		);
 	});
 
@@ -88,7 +42,18 @@ const ProjectList = ({
 			<Link to="/projects/create" className="btn btn-primary mb-2">
 				Create Project
 			</Link>
-			<div className="project-list">{renderedProjects}</div>
+			<table className="project-detail-table content-box">
+				<thead>
+					<tr>
+						<td>Title</td>
+						<td>Status</td>
+						<td>Created At</td>
+						<td>Last Update At</td>
+						<td>Closed At</td>
+					</tr>
+				</thead>
+				<tbody>{renderedProjects}</tbody>
+			</table>
 		</div>
 	);
 };
