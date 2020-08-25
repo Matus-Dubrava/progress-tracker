@@ -238,3 +238,50 @@ export const deleteProjectItem = async ({
 			.expect(expect);
 	}
 };
+
+export const updateProjectItem = async ({
+	cookie,
+	projectId,
+	itemId,
+	isFinished,
+	title,
+	description,
+	category,
+	expect,
+}: {
+	cookie?: string;
+	projectId: string;
+	itemId: string;
+	isFinished?: boolean;
+	title?: string;
+	description?: string;
+	category?: string;
+	expect: number;
+}): Promise<request.Response> => {
+	if (cookie) {
+		return await request(app)
+			.post(
+				`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}`
+			)
+			.set('Cookie', cookie)
+			.send({
+				isFinished,
+				title,
+				description,
+				category
+			})
+			.expect(expect);
+	} else {
+		return await request(app)
+			.post(
+				`${projectConfig.baseProjectUrl}/${projectId}/items/${itemId}`
+			)
+			.send({
+				isFinished,
+				title,
+				description,
+				category
+			})
+			.expect(expect);
+	}
+};

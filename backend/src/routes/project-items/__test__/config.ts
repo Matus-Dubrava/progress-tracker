@@ -2,7 +2,9 @@ import { ProjectItemCategory } from '../../../models/project-item';
 
 const config = {
 	testTitle: 'test title',
+	testTitle2: 'new test title',
 	testDescription: 'test description',
+	testDescription2: 'new test description',
 	categoryTask: ProjectItemCategory.Task,
 	categoryIssue: ProjectItemCategory.Issue,
 	invalidCategoryType: 'something else',
